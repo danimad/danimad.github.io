@@ -1,0 +1,22 @@
+---
+title: satRday
+author: Dániel Berecz
+date: '2017-07-04'
+slug: satrday
+categories: []
+tags: []
+---
+
+Test.
+
+```{r, eval=FALSE}
+x <- c(0, 2, 4, 8)
+```
+
+Math $f(x) = x$ test.  
+And more math test:
+
+$$
+f(x) = \int_0^1 g(x) \, \text{dx}
+$$
+

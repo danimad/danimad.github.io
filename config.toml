@@ -1,0 +1,37 @@
+baseurl = "https://danimad.github.io/"
+publishDir = "danimad.github.io"
+languageCode = "en"
+title = "Abgründe"
+theme = "minimo-mod"
+disqusShortname = ""
+enableDisqus = false
+enableDuoshuo = false
+googleAnalytics = ""
+enableGoogleAnalytics = false
+ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
+
+[params.highlight]
+  style = "paradiso-dark"
+
+[permalinks]
+    post = "/:year/:month/:day/:slug/"
+
+[params]
+  copyrightOwner = "Dániel Berecz"
+  copyrightStartYear = "2017"
+
+[author]
+  name = "Dániel Berecz"
+
+[author.email]
+  username = "daniel.berecz"
+  host = "gmail.com"
+
+[author.social]
+  github = "danimad"
+  twitter = "DanielBerecz"
+  stackoverflow = "749310/danielb?tab=profile"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
