@@ -1,4 +1,4 @@
-baseurl = "https://daniel.netlify.com/"
+baseurl = "https://danielb.netlify.com/"
 publishDir = "public"
 languageCode = "en"
 title = "Abgründe"
