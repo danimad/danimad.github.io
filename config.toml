@@ -1,5 +1,5 @@
-baseurl = "https://danimad.github.io/"
-publishDir = "danimad.github.io"
+baseurl = "https://daniel.netlify.com/"
+publishDir = "public"
 languageCode = "en"
 title = "Abgründe"
 theme = "minimo-mod"
