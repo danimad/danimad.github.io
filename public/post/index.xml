@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Abgründe</title>
+    <link>/post/</link>
+    <description>Recent content in Blog on Abgründe</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
+    <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
+    <lastBuildDate>Thu, 06 Jul 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualizing the flights data from the satRday Visualizaiton Challenge</title>
+      <link>/2017/07/06/satrday_flights_analysis/</link>
+      <pubDate>Thu, 06 Jul 2017 00:00:00 +0000</pubDate>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <guid>/2017/07/06/satrday_flights_analysis/</guid>
+      <description>The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.
+SetupI started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.</description>
+    </item>
+    
+    <item>
+      <title>satRday</title>
+      <link>/2017/07/04/satrday/</link>
+      <pubDate>Tue, 04 Jul 2017 00:00:00 +0000</pubDate>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <guid>/2017/07/04/satrday/</guid>
+      <description>Test.
+x &amp;lt;- c(0, 2, 4, 8) Math \(f(x) = x\) test.
+And more math test:
+\[ f(x) = \int_0^1 g(x) \, \text{dx} \]</description>
+    </item>
+    
+  </channel>
+</rss>
