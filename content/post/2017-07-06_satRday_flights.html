@@ -1,0 +1,70 @@
+---
+title: "Visualizing the flights data from the satRday Visualizaiton Challenge"
+author: "Dániel Berecz"
+date: "2017-07-06"
+output: html_document
+slug: satrday_flights_analysis
+categories: []
+tags: []
+---
+
+
+
+<p>The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.</p>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>I started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit. First, I split out the data prepration in seperate files, and I made the setup more dynamic.</p>
+<pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
+pacman::p_load(rprojroot,
+               knitr)
+
+root &lt;- find_root(is_rstudio_project)
+
+opts_knit$set(root.dir = root)
+rm(list = ls())
+
+bud_url &lt;- &quot;http://budapest.satrdays.org/data/BUD%20flights%202007-2012%20v2.xlsx&quot;
+airports_url &lt;- &quot;https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat&quot;
+
+raw_path &lt;- &quot;data/raw/&quot;
+flights_name &lt;- paste0(raw_path,&quot;flights.xlsx&quot;)
+airports_name &lt;- paste0(raw_path,&quot;airports.csv&quot;)
+
+dir.create(&quot;data/raw&quot;, recursive = TRUE)
+
+if(!file.exists(flights_name)) {
+  download.file(url = bud_url,
+                destfile = flights_name,
+                method = &quot;libcurl&quot;, mode = &quot;wb&quot;)
+}
+
+if(!file.exists(airports_name)) {
+  download.file(url = airports_url,
+                destfile = airports_name,
+                method = &quot;libcurl&quot;, mode = &quot;wb&quot;)
+}
+
+# removes the data folder and its contents recursivelly
+# unlink(x = &quot;data*&quot;, recursive = TRUE)</code></pre>
+<pre class="r"><code>pacman::p_load(readxl,
+               tidyverse,
+               lubridate)
+
+file_list &lt;- dir(&quot;data/raw&quot;, pattern = &quot;.xlsx&quot;, full.names = TRUE)
+
+flights &lt;- read_excel(file_list, sheet = 1)
+
+colnames(flights) &lt;- tolower(gsub(&quot; &quot;, &quot;_&quot;, names(flights)))
+
+flights_cleaned &lt;- flights %&gt;%
+  mutate(month = month(date)) %&gt;%
+  select(-c(region, commercial_flag, date_half_year, date_year_quarter,
+            date_year_month, date, destination)) %&gt;%
+  filter(!is.na(city))
+
+char_cols &lt;- names(flights_cleaned[, sapply(flights_cleaned, class) == &#39;character&#39;])
+
+flights_cleaned[sapply(flights_cleaned, is.character)] &lt;-
+  lapply(flights_cleaned[sapply(flights_cleaned, is.character)],
+         as.factor)</code></pre>
+</div>
