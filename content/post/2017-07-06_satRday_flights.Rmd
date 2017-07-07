@@ -1,11 +1,13 @@
 ---
 title: "Visualizing the flights data from the satRday Visualizaiton Challenge"
-author: "Dániel Berecz"
-date: "2017-07-06"
-output: html_document
+author: "DÃ¡niel Berecz"
+date: '2017-07-06'
+output:
+  html_document: default
+  pdf_document: default
 slug: satrday_flights_analysis
-categories: []
 tags: []
+categories: []
 ---
 
 The first satRday was held in Budapest the last year. There was a Visualization
@@ -18,24 +20,42 @@ I started to get into R around the satRday, and I learned a lot since then, so I
 decided I update the a code a bit. First, I split out the data prepration in
 seperate files, and I made the setup more dynamic.
 
-```{r setup, eval=FALSE}
+```{r setup, message=FALSE, warning=FALSE, error=FALSE}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(rprojroot,
-               knitr)
+               knitr,
+               printr,
+               bookdown)
 
 root <- find_root(is_rstudio_project)
 
 opts_knit$set(root.dir = root)
-rm(list = ls())
 
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      include = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.align = 'center',
+                      fig.show  = 'asis',
+                      # fig.width = 12,
+                      # fig.height = 12,
+                      fig.retina = TRUE
+                      )
+
+# rm(list = ls())
+```
+
+```{r data-download}
 bud_url <- "http://budapest.satrdays.org/data/BUD%20flights%202007-2012%20v2.xlsx"
 airports_url <- "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat"
 
 raw_path <- "data/raw/"
-flights_name <- paste0(raw_path,"flights.xlsx")
-airports_name <- paste0(raw_path,"airports.csv")
+flights_name <- paste0(root, raw_path, "flights.xlsx")
+airports_name <- paste0(root, raw_path, "airports.csv")
 
-dir.create("data/raw", recursive = TRUE)
+dir.create(paste0(root, "data/raw"), recursive = TRUE)
 
 if(!file.exists(flights_name)) {
   download.file(url = bud_url,
@@ -53,27 +73,97 @@ if(!file.exists(airports_name)) {
 # unlink(x = "data*", recursive = TRUE)
 ```
 
-```{r eda, eval=FALSE}
+```{r eda}
 pacman::p_load(readxl,
                tidyverse,
                lubridate)
 
-file_list <- dir("data/raw", pattern = ".xlsx", full.names = TRUE)
+file_list <- dir(paste0(root, "data/raw"), pattern = ".xlsx", full.names = TRUE)
 
 flights <- read_excel(file_list, sheet = 1)
 
+# colnames(flights) <- tolower(gsub(" ", "_", names(flights)))
+
+# flights_cleaned <- flights %>%
+#   mutate(month = month(date)) %>%
+#   select(-c(region, commercial_flag, date_half_year, date_year_quarter,
+#             date_year_month, date, destination)) %>%
+#   filter(!is.na(city))
+# 
+# char_cols <- names(flights_cleaned[, sapply(flights_cleaned, class) == 'character'])
+# 
+# flights_cleaned[sapply(flights_cleaned, is.character)] <-
+#   lapply(flights_cleaned[sapply(flights_cleaned, is.character)],
+#          as.factor)
+```
+
+
+```{r data-head}
+dimension <- dim(flights)
+names(dimension) <- (c("rows", "columns"))
+
+knitr::kable(dimension, caption = "Flights dataset dimensions")
+
+knitr::kable(t(head(flights, n = 4)), caption = "First few rows of the data")
+```
+
+
+```{r column-meanings}
+col_meaning <- data.frame(names(flights),
+                  c("Flight destination", "Aircraft type", "Destination city",
+                    "Country region", "Country", "The direction of the flight",
+                    "Flight type", "Flight date", "Flight year",
+                    "Flight half year", "Flight quarter", "Flight month",
+                    "Number of passengers", "Weight of transported cargo",
+                    "Number of flights on this route", "Seat capacity"))
+
+names(col_meaning) <- c("Column name", "Description of the data")
+
+knitr::kable(col_meaning, caption = "Column names, and desctiption")
+```
+
+```{r col-nas}
+na_values <- map(.x = flights, .f = is.na) %>%
+  map(.f = sum) %>%
+  as.data.frame() %>%
+  t()
+
+knitr::kable(na_values, caption = "Number of missing values in the columns")
+```
+
+```{r region-vals, echo=FALSE}
+region_values <- length(is.na(flights$REGION)) -
+  nrow(flights[is.na(flights$REGION), "REGION"])
+```
+
+```{r import, eval}
 colnames(flights) <- tolower(gsub(" ", "_", names(flights)))
 
-flights_cleaned <- flights %>%
-  mutate(month = month(date)) %>%
-  select(-c(region, commercial_flag, date_half_year, date_year_quarter,
-            date_year_month, date, destination)) %>%
-  filter(!is.na(city))
+flights_filtered <- flights %>%
+  select(-c(commercial_flag)) %>%
+  extract(date_half_year, regex = "([A-Z][0-9])",
+          into = "date_half_year") %>%
+  extract(date_year_quarter, regex = "([A-Z][0-9])",
+          into = "date_year_quarter") %>%
+  extract(date_year_month, regex = "[0-9]{4}([0-9]{2})",
+          into = "date_year_month") %>%
+  filter(!is.na(city)) %>%
+  select(-c(city))
+```
 
-char_cols <- names(flights_cleaned[, sapply(flights_cleaned, class) == 'character'])
 
-flights_cleaned[sapply(flights_cleaned, is.character)] <-
-  lapply(flights_cleaned[sapply(flights_cleaned, is.character)],
-         as.factor)
+```{r first-plot, fig.cap="First look at the data"}
+eda_plot <- ggplot(flights, aes(nbr_of_passengers, seat_capacity)) +
+  geom_point() +
+  xlab("Nr. of passengers/route/month") +
+  ylab("Seat capacity/route/month")
+
+eda_plot
+# dir.create(paste0(root, "img"), recursive = TRUE)
+# 
+# ggsave(filename = paste0(root, "img/eda_plot.png"), device = "png",
+#        plot = eda_plot, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics(paste0(root, "img/eda_plot.png"))
 ```
 
