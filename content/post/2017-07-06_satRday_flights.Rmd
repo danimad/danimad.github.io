@@ -25,7 +25,9 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(rprojroot,
                knitr,
                printr,
-               bookdown)
+               bookdown,
+               viridis,
+               ggthemes)
 
 root <- find_root(is_rstudio_project)
 
@@ -167,3 +169,186 @@ eda_plot
 # knitr::include_graphics(paste0(root, "img/eda_plot.png"))
 ```
 
+```{r bined-flights, fig.cap="Log converted data"}
+# flights <- read_csv("data/interim/flights_v2.csv")
+
+flights <- flights %>%
+  mutate(lg_pass = log2(nbr_of_passengers),
+         lg_seat = log2(seat_capacity))
+
+flights[!is.finite(flights$lg_pass), "lg_pass"] <- 0
+flights[!is.finite(flights$lg_seat), "lg_seat"] <- 0
+
+mod <- lm(lg_seat ~ lg_pass, data = flights)
+
+flights <- flights %>% mutate(rel_seat = resid(mod))
+
+binned_plot <- ggplot(flights, aes(lg_pass, lg_seat - lg_pass)) +
+  geom_bin2d() +
+  xlab("Log2 of Nr. of Passengers/route/month") +
+  ylab("Log2 of Seat Capacity/route/month")
+
+binned_plot
+# ggsave(filename = "img/binned_plot.png", device = "png",
+#        plot = binned_plot, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics("img/binned_plot.png")
+```
+
+```{r faceted-flights}
+# plot with background
+# from:
+# https://drsimonj.svbtle.com/plotting-background-data-for-groups-with-ggplot2
+flights_all <- flights %>% select(-date_year)
+
+yearly_dist <- ggplot(flights, aes(lg_pass, lg_seat - lg_pass)) +
+  geom_point(data = flights_all, color = "grey", alpha = 0.2) +
+  geom_point(aes(color = factor(date_year))) +
+  facet_wrap(~date_year, ncol = 3) +
+  scale_color_viridis(discrete = TRUE, "Year") + theme_bw() +
+  xlab("Log2 of Nr. of Passengers per route per month") +
+  ylab("Log2 of Seat Capacity per route per month")
+
+yearly_dist
+# ggsave(filename = "img/yearly_dist.png", device = "png",
+#        plot = yearly_dist, limitsize = TRUE, dpi = 100)
+# 
+# knitr::include_graphics("img/yearly_dist.png")
+```
+
+```{r waffle-function}
+# from: https://mvuorre.github.io/r/github-waffle-plot/
+geom_waffle <- function(data, date_par, data_scale,
+                        scale_name, pal = "D", dir = -1){
+  
+waffle_plot <- ggplot(data, aes(x = month(date_par), y = year(date_par),
+                               fill = data_scale)) +
+    scale_fill_viridis(name = scale_name, 
+                       option = pal,  # Variable color palette
+                       direction = dir,  # Variable color direction
+                       na.value = "grey93",
+                       limits = c(0, max(data_scale))) +
+    geom_tile(color = "white", size = 0.4) +
+    scale_x_continuous(
+      expand = c(0, 0),
+      breaks = seq(length = 12),
+      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) +
+    scale_y_continuous(
+      expand = c(0, 0),
+      breaks = seq(min(year(date_par)),
+                   max(year(date_par)), by = 1) 
+    ) +
+    theme_tufte(base_family = "Helvetica") +
+    theme(axis.title = element_text(),
+          axis.ticks = element_blank(),
+          legend.position = "bottom",
+          legend.key.width = unit(1, "cm"),
+          strip.text = element_text(hjust = 0.01, face = "bold", size = 12)) +
+    xlab("month") +
+    ylab("year")
+  
+  return(waffle_plot)
+}
+```
+
+```{r waffle1, fig.cap="Heatmap of passengers around the years"}
+# flights <- read_csv("data/interim/flights_v2.csv")
+
+waffle1 <- geom_waffle(flights, flights$date,
+            flights$nbr_of_passengers,
+            scale_name = "Nr. of Passengers/route/month")
+
+waffle1
+# ggsave(filename = "img/waffle1.png", device = "png",
+#        plot = waffle1, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics("img/waffle1.png")
+```
+
+```{r waffle2, fig.cap="Heatmap of the seat capacity around the years"}
+waffle2 <- geom_waffle(flights, flights$date,
+            flights$seat_capacity,
+            scale_name = "Seat Capacity per route per month")
+waffle2
+# ggsave(filename = "img/waffle2.png", device = "png",
+#        plot = waffle2, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics("img/waffle2.png")
+```
+
+```{r waffle3, fig.cap="Heatmap of flights around the years"}
+waffle3 <- geom_waffle(flights, flights$date,
+            flights$nbr_of_flights,
+            scale_name = "Nr. of Flights per route per month")
+
+waffle3
+# ggsave(filename = "img/waffle3.png", device = "png",
+#        plot = waffle3, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics("img/waffle3.png")
+```
+
+I also made a heatmap which shows which month had the most passengers for the
+top 25 countries (Figure \@ref(fig:heatmap)):
+
+```{r heatmap, fig.cap="Heatmap of the passenger numbers for the top 25 countries"}
+grp_flights <- flights %>%
+  mutate(years = as.numeric(date_year) + as.numeric(date_year_month)/12) %>%
+  group_by(country, date_year, date_year_month, years) %>%
+  summarise(nbr_pass = max(log2(sum(nbr_of_passengers)), 0))
+
+top_countries <- flights %>%
+  group_by(country) %>%
+  summarise(nbr_pass_country = sum(nbr_of_passengers)) %>%
+  top_n(n = 25, wt = nbr_pass_country)
+
+country_list <- as.list(top_countries$country)
+
+grp_flights_filtered <- grp_flights %>%
+  slice(country %in% top_countries$country)
+
+min_pass <- min(grp_flights_filtered$nbr_pass)
+max_pass <- max(grp_flights_filtered$nbr_pass)
+bins <- 5
+breaks <- seq(round(min_pass,2), round(max_pass,2) ,
+              by = round((max_pass-min_pass)/bins, 2))
+
+heatmap <- ggplot(grp_flights_filtered, aes(y=country, x=years, fill=nbr_pass)) + 
+  geom_tile(color="white",
+            width=.9, height=.9) + theme_minimal() +
+  scale_fill_gradientn(colors = viridis::viridis(bins),
+                       limits=c(min_pass, max_pass),
+                       breaks = breaks,
+                       na.value=rgb(246, 246, 246, max=255),
+                       labels = breaks,
+                       guide=guide_colourbar(ticks=T, nbin=bins,
+                                             barheight=.5, label=T, 
+                                             barwidth=1+sqrt(bins*10))) +
+  scale_x_continuous(expand=c(0,0), 
+                     breaks=seq(2007, 2012, by=1)) +
+  labs(x="", y="", fill="") +
+  ggtitle("Nr. of montly passengers") +
+  theme(legend.position=c(.5, -.10),
+        legend.direction="horizontal",
+        legend.text=element_text(colour="grey20", size = 6),
+        plot.margin=grid::unit(c(.5,1.5,1.5,.1), "cm"),
+        axis.text.y=element_text(size=6, 
+                                 hjust=1),
+        axis.text.x=element_text(size=8),
+        axis.ticks.y=element_blank(),
+        panel.grid=element_blank(),
+        title=element_text(hjust=-.07, face="bold", vjust=1))
+
+heatmap
+# ggsave(filename = "img/heatmap.png", device = "png",
+#        plot = heatmap, limitsize = TRUE, dpi = 120)
+# 
+# knitr::include_graphics("img/heatmap.png")
+```
+```{r cor-mat, fig.cap="Correlations between variables"}
+library(GGally)
+cor_mat <- cor(data.matrix(flights_filtered))
+
+ggcorr(cor_mat)
+```
