@@ -53,11 +53,11 @@ knitr::opts_chunk$set(echo = TRUE,
 bud_url <- "http://budapest.satrdays.org/data/BUD%20flights%202007-2012%20v2.xlsx"
 airports_url <- "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat"
 
-raw_path <- "data/raw/"
+raw_path <- "/data/raw/"
 flights_name <- paste0(root, raw_path, "flights.xlsx")
 airports_name <- paste0(root, raw_path, "airports.csv")
 
-dir.create(paste0(root, "data/raw"), recursive = TRUE)
+dir.create(paste0(root, raw_path), recursive = TRUE)
 
 if(!file.exists(flights_name)) {
   download.file(url = bud_url,
@@ -80,7 +80,7 @@ pacman::p_load(readxl,
                tidyverse,
                lubridate)
 
-file_list <- dir(paste0(root, "data/raw"), pattern = ".xlsx", full.names = TRUE)
+file_list <- dir(paste0(root, raw_path), pattern = ".xlsx", full.names = TRUE)
 
 flights <- read_excel(file_list, sheet = 1)
 

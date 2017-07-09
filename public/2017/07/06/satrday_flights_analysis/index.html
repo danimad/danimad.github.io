@@ -5,16 +5,16 @@
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta name='description' content='The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.
-SetupI started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.'>
+Setup I started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.'>
 
 <meta property='og:title' content='Visualizing the flights data from the satRday Visualizaiton Challenge • Dániel Berecz'>
 <meta property='og:description' content='The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.
-SetupI started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.'>
+Setup I started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.'>
 <meta property='og:url' content='/2017/07/06/satrday_flights_analysis/'>
 <meta property='og:site_name' content='Abgründe'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/48048310a61a68060cb1c9fe1cd05613?s=256'><meta property='article:section' content='Post'><meta property='article:published_time' content='2017-07-06T00:00:00Z'/><meta property='article:modified_time' content='2017-07-06T00:00:00Z'/>
 
-<meta name="generator" content="Hugo 0.24.1" />
+<meta name="generator" content="Hugo 0.25" />
 
   <base href='/'>
   <title>Visualizing the flights data from the satRday Visualizaiton Challenge • Dániel Berecz</title>
@@ -25,8 +25,8 @@ SetupI started to get into R around the satRday, and I learned a lot since then
 <script type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/paraiso-dark.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<link rel="stylesheet" href="/css/paraiso-dark.css">
+<script src="/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <link rel='stylesheet' href='/css/main.d02777fd.css'>
 
@@ -118,21 +118,38 @@ SetupI started to get into R around the satRday, and I learned a lot since then
 <p>I started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit. First, I split out the data prepration in seperate files, and I made the setup more dynamic.</p>
 <pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
 pacman::p_load(rprojroot,
-               knitr)
+               knitr,
+               printr,
+               bookdown,
+               viridis,
+               ggthemes)
 
 root &lt;- find_root(is_rstudio_project)
 
 opts_knit$set(root.dir = root)
-rm(list = ls())
 
-bud_url &lt;- &quot;http://budapest.satrdays.org/data/BUD%20flights%202007-2012%20v2.xlsx&quot;
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      include = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.align = &#39;center&#39;,
+                      fig.show  = &#39;asis&#39;,
+                      # fig.width = 12,
+                      # fig.height = 12,
+                      fig.retina = TRUE
+                      )
+
+# rm(list = ls())</code></pre>
+<pre class="r"><code>bud_url &lt;- &quot;http://budapest.satrdays.org/data/BUD%20flights%202007-2012%20v2.xlsx&quot;
 airports_url &lt;- &quot;https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat&quot;
 
-raw_path &lt;- &quot;data/raw/&quot;
-flights_name &lt;- paste0(raw_path,&quot;flights.xlsx&quot;)
-airports_name &lt;- paste0(raw_path,&quot;airports.csv&quot;)
+raw_path &lt;- &quot;/data/raw/&quot;
+flights_name &lt;- paste0(root, raw_path, &quot;flights.xlsx&quot;)
+airports_name &lt;- paste0(root, raw_path, &quot;airports.csv&quot;)
 
-dir.create(&quot;data/raw&quot;, recursive = TRUE)
+dir.create(paste0(root, raw_path), recursive = TRUE)
 
 if(!file.exists(flights_name)) {
   download.file(url = bud_url,
@@ -152,23 +169,545 @@ if(!file.exists(airports_name)) {
                tidyverse,
                lubridate)
 
-file_list &lt;- dir(&quot;data/raw&quot;, pattern = &quot;.xlsx&quot;, full.names = TRUE)
+file_list &lt;- dir(paste0(root, raw_path), pattern = &quot;.xlsx&quot;, full.names = TRUE)
 
 flights &lt;- read_excel(file_list, sheet = 1)
 
-colnames(flights) &lt;- tolower(gsub(&quot; &quot;, &quot;_&quot;, names(flights)))
+# colnames(flights) &lt;- tolower(gsub(&quot; &quot;, &quot;_&quot;, names(flights)))
 
-flights_cleaned &lt;- flights %&gt;%
-  mutate(month = month(date)) %&gt;%
-  select(-c(region, commercial_flag, date_half_year, date_year_quarter,
-            date_year_month, date, destination)) %&gt;%
-  filter(!is.na(city))
+# flights_cleaned &lt;- flights %&gt;%
+#   mutate(month = month(date)) %&gt;%
+#   select(-c(region, commercial_flag, date_half_year, date_year_quarter,
+#             date_year_month, date, destination)) %&gt;%
+#   filter(!is.na(city))
+# 
+# char_cols &lt;- names(flights_cleaned[, sapply(flights_cleaned, class) == &#39;character&#39;])
+# 
+# flights_cleaned[sapply(flights_cleaned, is.character)] &lt;-
+#   lapply(flights_cleaned[sapply(flights_cleaned, is.character)],
+#          as.factor)</code></pre>
+<pre class="r"><code>dimension &lt;- dim(flights)
+names(dimension) &lt;- (c(&quot;rows&quot;, &quot;columns&quot;))
 
-char_cols &lt;- names(flights_cleaned[, sapply(flights_cleaned, class) == &#39;character&#39;])
+knitr::kable(dimension, caption = &quot;Flights dataset dimensions&quot;)</code></pre>
+<table>
+<caption>Flights dataset dimensions</caption>
+<tbody>
+<tr class="odd">
+<td align="left">rows</td>
+<td align="right">18837</td>
+</tr>
+<tr class="even">
+<td align="left">columns</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(t(head(flights, n = 4)), caption = &quot;First few rows of the data&quot;)</code></pre>
+<table>
+<caption>First few rows of the data</caption>
+<tbody>
+<tr class="odd">
+<td align="left">DESTINATION</td>
+<td align="left">Aalborg</td>
+<td align="left">Aalborg</td>
+<td align="left">Aalborg</td>
+<td align="left">Aarhus</td>
+</tr>
+<tr class="even">
+<td align="left">COMMERCIAL FLAG</td>
+<td align="left">Commercial</td>
+<td align="left">Commercial</td>
+<td align="left">Commercial</td>
+<td align="left">Commercial</td>
+</tr>
+<tr class="odd">
+<td align="left">CITY</td>
+<td align="left">Aalborg</td>
+<td align="left">Aalborg</td>
+<td align="left">Aalborg</td>
+<td align="left">Aarhus</td>
+</tr>
+<tr class="even">
+<td align="left">REGION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">COUNTRY</td>
+<td align="left">Denmark</td>
+<td align="left">Denmark</td>
+<td align="left">Denmark</td>
+<td align="left">Denmark</td>
+</tr>
+<tr class="even">
+<td align="left">FLIGH DIRECTION</td>
+<td align="left">Incoming</td>
+<td align="left">Outgoing</td>
+<td align="left">Incoming</td>
+<td align="left">Incoming</td>
+</tr>
+<tr class="odd">
+<td align="left">FLIGHT TYPE</td>
+<td align="left">Non Scheduled</td>
+<td align="left">Non Scheduled</td>
+<td align="left">Non Scheduled</td>
+<td align="left">Non Scheduled</td>
+</tr>
+<tr class="even">
+<td align="left">DATE</td>
+<td align="left">2010-11-01</td>
+<td align="left">2010-12-01</td>
+<td align="left">2011-01-01</td>
+<td align="left">2007-05-01</td>
+</tr>
+<tr class="odd">
+<td align="left">DATE YEAR</td>
+<td align="left">2010</td>
+<td align="left">2010</td>
+<td align="left">2011</td>
+<td align="left">2007</td>
+</tr>
+<tr class="even">
+<td align="left">DATE HALF YEAR</td>
+<td align="left">2010H2</td>
+<td align="left">2010H2</td>
+<td align="left">2011H1</td>
+<td align="left">2007H1</td>
+</tr>
+<tr class="odd">
+<td align="left">DATE YEAR QUARTER</td>
+<td align="left">2010Q4</td>
+<td align="left">2010Q4</td>
+<td align="left">2011Q1</td>
+<td align="left">2007Q2</td>
+</tr>
+<tr class="even">
+<td align="left">DATE YEAR MONTH</td>
+<td align="left">201011</td>
+<td align="left">201012</td>
+<td align="left">201101</td>
+<td align="left">200705</td>
+</tr>
+<tr class="odd">
+<td align="left">NBR OF PASSENGERS</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">102</td>
+</tr>
+<tr class="even">
+<td align="left">CARGO WEIGHT</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">NBR OF FLIGHTS</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">SEAT CAPACITY</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">200</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>col_meaning &lt;- data.frame(names(flights),
+                  c(&quot;Flight destination&quot;, &quot;Aircraft type&quot;, &quot;Destination city&quot;,
+                    &quot;Country region&quot;, &quot;Country&quot;, &quot;The direction of the flight&quot;,
+                    &quot;Flight type&quot;, &quot;Flight date&quot;, &quot;Flight year&quot;,
+                    &quot;Flight half year&quot;, &quot;Flight quarter&quot;, &quot;Flight month&quot;,
+                    &quot;Number of passengers&quot;, &quot;Weight of transported cargo&quot;,
+                    &quot;Number of flights on this route&quot;, &quot;Seat capacity&quot;))
 
-flights_cleaned[sapply(flights_cleaned, is.character)] &lt;-
-  lapply(flights_cleaned[sapply(flights_cleaned, is.character)],
-         as.factor)</code></pre>
+names(col_meaning) &lt;- c(&quot;Column name&quot;, &quot;Description of the data&quot;)
+
+knitr::kable(col_meaning, caption = &quot;Column names, and desctiption&quot;)</code></pre>
+<table>
+<caption>Column names, and desctiption</caption>
+<thead>
+<tr class="header">
+<th align="left">Column name</th>
+<th align="left">Description of the data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DESTINATION</td>
+<td align="left">Flight destination</td>
+</tr>
+<tr class="even">
+<td align="left">COMMERCIAL FLAG</td>
+<td align="left">Aircraft type</td>
+</tr>
+<tr class="odd">
+<td align="left">CITY</td>
+<td align="left">Destination city</td>
+</tr>
+<tr class="even">
+<td align="left">REGION</td>
+<td align="left">Country region</td>
+</tr>
+<tr class="odd">
+<td align="left">COUNTRY</td>
+<td align="left">Country</td>
+</tr>
+<tr class="even">
+<td align="left">FLIGH DIRECTION</td>
+<td align="left">The direction of the flight</td>
+</tr>
+<tr class="odd">
+<td align="left">FLIGHT TYPE</td>
+<td align="left">Flight type</td>
+</tr>
+<tr class="even">
+<td align="left">DATE</td>
+<td align="left">Flight date</td>
+</tr>
+<tr class="odd">
+<td align="left">DATE YEAR</td>
+<td align="left">Flight year</td>
+</tr>
+<tr class="even">
+<td align="left">DATE HALF YEAR</td>
+<td align="left">Flight half year</td>
+</tr>
+<tr class="odd">
+<td align="left">DATE YEAR QUARTER</td>
+<td align="left">Flight quarter</td>
+</tr>
+<tr class="even">
+<td align="left">DATE YEAR MONTH</td>
+<td align="left">Flight month</td>
+</tr>
+<tr class="odd">
+<td align="left">NBR OF PASSENGERS</td>
+<td align="left">Number of passengers</td>
+</tr>
+<tr class="even">
+<td align="left">CARGO WEIGHT</td>
+<td align="left">Weight of transported cargo</td>
+</tr>
+<tr class="odd">
+<td align="left">NBR OF FLIGHTS</td>
+<td align="left">Number of flights on this route</td>
+</tr>
+<tr class="even">
+<td align="left">SEAT CAPACITY</td>
+<td align="left">Seat capacity</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>na_values &lt;- map(.x = flights, .f = is.na) %&gt;%
+  map(.f = sum) %&gt;%
+  as.data.frame() %&gt;%
+  t()
+
+knitr::kable(na_values, caption = &quot;Number of missing values in the columns&quot;)</code></pre>
+<table>
+<caption>Number of missing values in the columns</caption>
+<tbody>
+<tr class="odd">
+<td align="left">DESTINATION</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">COMMERCIAL.FLAG</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">CITY</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">REGION</td>
+<td align="right">14520</td>
+</tr>
+<tr class="odd">
+<td align="left">COUNTRY</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">FLIGH.DIRECTION</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">FLIGHT.TYPE</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">DATE</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">DATE.YEAR</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">DATE.HALF.YEAR</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">DATE.YEAR.QUARTER</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">DATE.YEAR.MONTH</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">NBR.OF.PASSENGERS</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CARGO.WEIGHT</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">NBR.OF.FLIGHTS</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">SEAT.CAPACITY</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>colnames(flights) &lt;- tolower(gsub(&quot; &quot;, &quot;_&quot;, names(flights)))
+
+flights_filtered &lt;- flights %&gt;%
+  select(-c(commercial_flag)) %&gt;%
+  extract(date_half_year, regex = &quot;([A-Z][0-9])&quot;,
+          into = &quot;date_half_year&quot;) %&gt;%
+  extract(date_year_quarter, regex = &quot;([A-Z][0-9])&quot;,
+          into = &quot;date_year_quarter&quot;) %&gt;%
+  extract(date_year_month, regex = &quot;[0-9]{4}([0-9]{2})&quot;,
+          into = &quot;date_year_month&quot;) %&gt;%
+  filter(!is.na(city)) %&gt;%
+  select(-c(city))</code></pre>
+<pre class="r"><code>eda_plot &lt;- ggplot(flights, aes(nbr_of_passengers, seat_capacity)) +
+  geom_point() +
+  xlab(&quot;Nr. of passengers/route/month&quot;) +
+  ylab(&quot;Seat capacity/route/month&quot;)
+
+eda_plot</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/first-plot-1.png" alt="First look at the data"  />
+<p class="caption">
+First look at the data
+</p>
+</div>
+<pre class="r"><code># dir.create(paste0(root, &quot;img&quot;), recursive = TRUE)
+# 
+# ggsave(filename = paste0(root, &quot;img/eda_plot.png&quot;), device = &quot;png&quot;,
+#        plot = eda_plot, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics(paste0(root, &quot;img/eda_plot.png&quot;))</code></pre>
+<pre class="r"><code># flights &lt;- read_csv(&quot;data/interim/flights_v2.csv&quot;)
+
+flights &lt;- flights %&gt;%
+  mutate(lg_pass = log2(nbr_of_passengers),
+         lg_seat = log2(seat_capacity))
+
+flights[!is.finite(flights$lg_pass), &quot;lg_pass&quot;] &lt;- 0
+flights[!is.finite(flights$lg_seat), &quot;lg_seat&quot;] &lt;- 0
+
+mod &lt;- lm(lg_seat ~ lg_pass, data = flights)
+
+flights &lt;- flights %&gt;% mutate(rel_seat = resid(mod))
+
+binned_plot &lt;- ggplot(flights, aes(lg_pass, lg_seat - lg_pass)) +
+  geom_bin2d() +
+  xlab(&quot;Log2 of Nr. of Passengers/route/month&quot;) +
+  ylab(&quot;Log2 of Seat Capacity/route/month&quot;)
+
+binned_plot</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/bined-flights-1.png" alt="Log converted data"  />
+<p class="caption">
+Log converted data
+</p>
+</div>
+<pre class="r"><code># ggsave(filename = &quot;img/binned_plot.png&quot;, device = &quot;png&quot;,
+#        plot = binned_plot, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics(&quot;img/binned_plot.png&quot;)</code></pre>
+<pre class="r"><code># plot with background
+# from:
+# https://drsimonj.svbtle.com/plotting-background-data-for-groups-with-ggplot2
+flights_all &lt;- flights %&gt;% select(-date_year)
+
+yearly_dist &lt;- ggplot(flights, aes(lg_pass, lg_seat - lg_pass)) +
+  geom_point(data = flights_all, color = &quot;grey&quot;, alpha = 0.2) +
+  geom_point(aes(color = factor(date_year))) +
+  facet_wrap(~date_year, ncol = 3) +
+  scale_color_viridis(discrete = TRUE, &quot;Year&quot;) + theme_bw() +
+  xlab(&quot;Log2 of Nr. of Passengers per route per month&quot;) +
+  ylab(&quot;Log2 of Seat Capacity per route per month&quot;)
+
+yearly_dist</code></pre>
+<p><img src="/post/2017-07-06_satRday_flights_files/figure-html/faceted-flights-1.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># ggsave(filename = &quot;img/yearly_dist.png&quot;, device = &quot;png&quot;,
+#        plot = yearly_dist, limitsize = TRUE, dpi = 100)
+# 
+# knitr::include_graphics(&quot;img/yearly_dist.png&quot;)</code></pre>
+<pre class="r"><code># from: https://mvuorre.github.io/r/github-waffle-plot/
+geom_waffle &lt;- function(data, date_par, data_scale,
+                        scale_name, pal = &quot;D&quot;, dir = -1){
+  
+waffle_plot &lt;- ggplot(data, aes(x = month(date_par), y = year(date_par),
+                               fill = data_scale)) +
+    scale_fill_viridis(name = scale_name, 
+                       option = pal,  # Variable color palette
+                       direction = dir,  # Variable color direction
+                       na.value = &quot;grey93&quot;,
+                       limits = c(0, max(data_scale))) +
+    geom_tile(color = &quot;white&quot;, size = 0.4) +
+    scale_x_continuous(
+      expand = c(0, 0),
+      breaks = seq(length = 12),
+      labels = c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;,
+                 &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;)) +
+    scale_y_continuous(
+      expand = c(0, 0),
+      breaks = seq(min(year(date_par)),
+                   max(year(date_par)), by = 1) 
+    ) +
+    theme_tufte(base_family = &quot;Helvetica&quot;) +
+    theme(axis.title = element_text(),
+          axis.ticks = element_blank(),
+          legend.position = &quot;bottom&quot;,
+          legend.key.width = unit(1, &quot;cm&quot;),
+          strip.text = element_text(hjust = 0.01, face = &quot;bold&quot;, size = 12)) +
+    xlab(&quot;month&quot;) +
+    ylab(&quot;year&quot;)
+  
+  return(waffle_plot)
+}</code></pre>
+<pre class="r"><code># flights &lt;- read_csv(&quot;data/interim/flights_v2.csv&quot;)
+
+waffle1 &lt;- geom_waffle(flights, flights$date,
+            flights$nbr_of_passengers,
+            scale_name = &quot;Nr. of Passengers/route/month&quot;)
+
+waffle1</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/waffle1-1.png" alt="Heatmap of passengers around the years"  />
+<p class="caption">
+Heatmap of passengers around the years
+</p>
+</div>
+<pre class="r"><code># ggsave(filename = &quot;img/waffle1.png&quot;, device = &quot;png&quot;,
+#        plot = waffle1, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics(&quot;img/waffle1.png&quot;)</code></pre>
+<pre class="r"><code>waffle2 &lt;- geom_waffle(flights, flights$date,
+            flights$seat_capacity,
+            scale_name = &quot;Seat Capacity per route per month&quot;)
+waffle2</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/waffle2-1.png" alt="Heatmap of the seat capacity around the years"  />
+<p class="caption">
+Heatmap of the seat capacity around the years
+</p>
+</div>
+<pre class="r"><code># ggsave(filename = &quot;img/waffle2.png&quot;, device = &quot;png&quot;,
+#        plot = waffle2, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics(&quot;img/waffle2.png&quot;)</code></pre>
+<pre class="r"><code>waffle3 &lt;- geom_waffle(flights, flights$date,
+            flights$nbr_of_flights,
+            scale_name = &quot;Nr. of Flights per route per month&quot;)
+
+waffle3</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/waffle3-1.png" alt="Heatmap of flights around the years"  />
+<p class="caption">
+Heatmap of flights around the years
+</p>
+</div>
+<pre class="r"><code># ggsave(filename = &quot;img/waffle3.png&quot;, device = &quot;png&quot;,
+#        plot = waffle3, limitsize = TRUE, dpi = 72)
+# 
+# knitr::include_graphics(&quot;img/waffle3.png&quot;)</code></pre>
+<p>I also made a heatmap which shows which month had the most passengers for the top 25 countries (Figure <a href="#fig:heatmap"><strong>??</strong></a>):</p>
+<pre class="r"><code>grp_flights &lt;- flights %&gt;%
+  mutate(years = as.numeric(date_year) + as.numeric(date_year_month)/12) %&gt;%
+  group_by(country, date_year, date_year_month, years) %&gt;%
+  summarise(nbr_pass = max(log2(sum(nbr_of_passengers)), 0))
+
+top_countries &lt;- flights %&gt;%
+  group_by(country) %&gt;%
+  summarise(nbr_pass_country = sum(nbr_of_passengers)) %&gt;%
+  top_n(n = 25, wt = nbr_pass_country)
+
+country_list &lt;- as.list(top_countries$country)
+
+grp_flights_filtered &lt;- grp_flights %&gt;%
+  slice(country %in% top_countries$country)
+
+min_pass &lt;- min(grp_flights_filtered$nbr_pass)
+max_pass &lt;- max(grp_flights_filtered$nbr_pass)
+bins &lt;- 5
+breaks &lt;- seq(round(min_pass,2), round(max_pass,2) ,
+              by = round((max_pass-min_pass)/bins, 2))
+
+heatmap &lt;- ggplot(grp_flights_filtered, aes(y=country, x=years, fill=nbr_pass)) + 
+  geom_tile(color=&quot;white&quot;,
+            width=.9, height=.9) + theme_minimal() +
+  scale_fill_gradientn(colors = viridis::viridis(bins),
+                       limits=c(min_pass, max_pass),
+                       breaks = breaks,
+                       na.value=rgb(246, 246, 246, max=255),
+                       labels = breaks,
+                       guide=guide_colourbar(ticks=T, nbin=bins,
+                                             barheight=.5, label=T, 
+                                             barwidth=1+sqrt(bins*10))) +
+  scale_x_continuous(expand=c(0,0), 
+                     breaks=seq(2007, 2012, by=1)) +
+  labs(x=&quot;&quot;, y=&quot;&quot;, fill=&quot;&quot;) +
+  ggtitle(&quot;Nr. of montly passengers&quot;) +
+  theme(legend.position=c(.5, -.10),
+        legend.direction=&quot;horizontal&quot;,
+        legend.text=element_text(colour=&quot;grey20&quot;, size = 6),
+        plot.margin=grid::unit(c(.5,1.5,1.5,.1), &quot;cm&quot;),
+        axis.text.y=element_text(size=6, 
+                                 hjust=1),
+        axis.text.x=element_text(size=8),
+        axis.ticks.y=element_blank(),
+        panel.grid=element_blank(),
+        title=element_text(hjust=-.07, face=&quot;bold&quot;, vjust=1))
+
+heatmap</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/heatmap-1.png" alt="Heatmap of the passenger numbers for the top 25 countries"  />
+<p class="caption">
+Heatmap of the passenger numbers for the top 25 countries
+</p>
+</div>
+<pre class="r"><code># ggsave(filename = &quot;img/heatmap.png&quot;, device = &quot;png&quot;,
+#        plot = heatmap, limitsize = TRUE, dpi = 120)
+# 
+# knitr::include_graphics(&quot;img/heatmap.png&quot;)</code></pre>
+<pre class="r"><code>library(GGally)
+cor_mat &lt;- cor(data.matrix(flights_filtered))
+
+ggcorr(cor_mat)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="/post/2017-07-06_satRday_flights_files/figure-html/cor-mat-1.png" alt="Correlations between variables"  />
+<p class="caption">
+Correlations between variables
+</p>
+</div>
 </div>
 
 </div>
@@ -198,6 +737,16 @@ flights_cleaned[sapply(flights_cleaned, is.character)] &lt;-
 </svg>
  Previous</span>
         <span class='screen-reader'>Previous post: </span>satRday</a>
+    </div><div class='next-entry'>
+      <a href='/2017/07/09/test-joyplot-on-the-flights-data-set/'>
+        <span class='screen-reader'>Next post: </span>Test joyplot on the flights data set<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="4" y1="12" x2="20" y2="12"/>
+  <polyline points="14 6 20 12 14 18"/>
+  
+</svg>
+</span>
+      </a>
     </div></div>
 </nav>
 

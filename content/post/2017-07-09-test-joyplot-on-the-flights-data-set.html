@@ -1,0 +1,133 @@
+---
+title: Test joyplot on the flights data set
+author: Dániel Berecz
+date: '2017-07-09'
+slug: test-joyplot-on-the-flights-data-set
+categories:
+  - dataviz
+  - rstats
+tags: []
+---
+
+
+
+<p>This week I’ve seen an interting visualization tweeted:</p>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+Peak time for sports and leisure <a href="https://twitter.com/hashtag/dataviz?src=hash">#dataviz</a>. About time for a joyplot; might do a write-up on them. <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a> code at <a href="https://t.co/Q2AgW068Wa">https://t.co/Q2AgW068Wa</a> <a href="https://t.co/SVT6pkB2hB">pic.twitter.com/SVT6pkB2hB</a>
+</p>
+— Henrik Lindberg (<span class="citation">@hnrklndbrg</span>) <a href="https://twitter.com/hnrklndbrg/status/883675698300420098">July 8, 2017</a>
+</blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>and I thought I’d try to reproduce it on a different dataset for practice.</p>
+<p>You can find the original repo <a href="https://github.com/halhen/viz-pub/tree/master/sports-time-of-day">here</a>.</p>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>First I load the packages with the <code>pacman</code> package. This will install the packages if they aren’t on the system. Next I create a variable for the project root called <code>root</code>, this will help with correctly referencing the project files. After this I set the <code>knitr</code> parameters as I like it.</p>
+<pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
+pacman::p_load(rprojroot,
+               tidyverse,
+               readxl,
+               knitr,
+               printr,
+               bookdown,
+               viridis,
+               ggthemes)
+
+root &lt;- find_root(is_rstudio_project)
+
+opts_knit$set(root.dir = root)
+
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      include = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.align = &#39;center&#39;,
+                      fig.show  = &#39;asis&#39;,
+                      fig.width = 8,
+                      fig.height = 8,
+                      fig.retina = TRUE
+                      )</code></pre>
+</div>
+<div id="visualization" class="section level2">
+<h2>Visualization</h2>
+<p>In this step I source the theme created by the original vis creator directly from Github, and download the data file from the satRday site.</p>
+<pre class="r"><code>source(&quot;https://cdn.rawgit.com/halhen/viz-pub/e905a29f/sports-time-of-day/henrik.r&quot;)
+
+bud_url &lt;- &quot;http://budapest.satrdays.org/data/BUD%20flights%202007-2012%20v2.xlsx&quot;
+
+raw_path &lt;- &quot;/data/raw/&quot;
+flights_name &lt;- paste0(root, raw_path, &quot;flights.xlsx&quot;)
+
+dir.create(paste0(root, raw_path), recursive = TRUE)
+
+if(!file.exists(flights_name)) {
+  download.file(url = bud_url,
+                destfile = flights_name,
+                method = &quot;libcurl&quot;, mode = &quot;wb&quot;)
+}</code></pre>
+<p>Before I can visualize the data, first I had to clean it. I converted the column names to a normal format, created a list of the top 25 countries by shipped cargo weight. After this I removed the not needed columns.</p>
+<pre class="r"><code>file_list &lt;- dir(paste0(root, raw_path), pattern = &quot;.xlsx&quot;, full.names = TRUE)
+
+flights &lt;- read_excel(file_list, sheet = 1)
+
+colnames(flights) &lt;- tolower(gsub(&quot; &quot;, &quot;_&quot;, names(flights)))
+
+# Create a list of the top 25 countries by cargo weight
+top_countries &lt;- flights %&gt;%
+  group_by(country) %&gt;%
+  summarise(cargo_sum = sum(cargo_weight)) %&gt;%
+  top_n(n = 25, wt = cargo_sum)
+
+country_list &lt;- as.list(top_countries$country)
+
+# filtering the data, and removing the not needed columns
+flights &lt;- flights %&gt;%
+  extract(date_year_month, regex = &quot;[0-9]{4}([0-9]{2})&quot;,
+          into = &quot;date_year_month&quot;) %&gt;%
+  filter(!is.na(city)) %&gt;%
+  select(-c(commercial_flag, city, region, date_half_year, date_year_quarter, date)) %&gt;%
+  mutate(years = as.numeric(date_year) + as.numeric(date_year_month)/12) %&gt;%
+  group_by(country, date_year, date_year_month, years) %&gt;%
+  summarise(nbr_pass = sum(cargo_weight)) %&gt;%
+  slice(country %in% top_countries$country)</code></pre>
+<p>Next I copied the visualization code from the original author’s code, and changed the variables.</p>
+<pre class="r"><code>flights %&gt;%
+  group_by(country) %&gt;%
+  arrange(years) %&gt;%
+  mutate(p_peak = nbr_pass / max(nbr_pass),
+         p_smooth = (lag(p_peak) + p_peak + lead(p_peak)) / 3,
+         p_smooth = coalesce(p_smooth, p_peak)) %&gt;%
+  ungroup() %&gt;%
+  mutate(country = reorder(country, p_peak, FUN=which.max)) %&gt;%
+  arrange(country) %&gt;%
+  mutate(country.f = reorder(as.character(country), desc(country))) %&gt;%
+  {
+    country &lt;- levels(.$country)
+    
+    ggplot(., aes(years, group=country.f,
+                  fill=factor(as.integer(country.f) %% 2))) +
+      geom_ribbon(aes(ymin = as.integer(country),
+                      ymax = as.integer(country) + 2 * p_smooth),
+                  color=&#39;white&#39;, size=0.4) +
+      scale_y_continuous(breaks = 1:length(country),
+                         labels = function(y) {country[y]}) +
+      
+      scale_fill_manual(values = c(&#39;0&#39; = &#39;#2A7FFF&#39;, &#39;1&#39; = &#39;#5599FF&#39;)) +
+      labs(x=&quot;&quot;, y=&quot;&quot;, caption=&#39;Dániel Berecz | Source: KSH/BI Consulting&#39;) +
+      theme_henrik(grid=&#39;&#39;, legend.position=&#39;none&#39;) +
+      theme(axis.ticks.x = element_line(size=0.3))
+  }</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-1"></span>
+<img src="/post/2017-07-09-test-joyplot-on-the-flights-data-set_files/figure-html/unnamed-chunk-1-1.png" alt="Shipped cargo weigth to the top 25 countries"  />
+<p class="caption">
+Figure 1: Shipped cargo weigth to the top 25 countries
+</p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>You can see an interesting shift in destionation countries for the cargo. I started with plotting the passenger number distributions, but there wasn’t any intersting pattern in it at first sight. I plan to plot that also, but I will try to make it with code that uses <a href="http://www.win-vector.com/blog/2017/06/non-standard-evaluation-and-function-composition-in-r/">non-standard evaluation</a>, so I can avoid copying code.</p>
+</div>

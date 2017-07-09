@@ -10,9 +10,6 @@ googleAnalytics = ""
 enableGoogleAnalytics = false
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 
-[params.highlight]
-  style = "paradiso-dark"
-
 [permalinks]
     post = "/:year/:month/:day/:slug/"
 
