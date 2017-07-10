@@ -17,6 +17,14 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
   copyrightOwner = "Dániel Berecz"
   copyrightStartYear = "2017"
 
+  highlightjsVersion = "9.12.0"
+  highlightjsCDN = "//cdnjs.cloudflare.com/ajax/libs"
+  highlightjsLang = ["r"]
+  highlightjsTheme = "paradiso-dark"
+
+  MathJaxCDN = "//cdnjs.cloudflare.com/ajax/libs"
+  MathJaxVersion = "2.7.1"
+
 [author]
   name = "Dániel Berecz"
 

@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
-    <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
+    <webMaster>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</webMaster>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     

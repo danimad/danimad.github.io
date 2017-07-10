@@ -17,7 +17,7 @@
       <title>Test joyplot on the flights data set</title>
       <link>/2017/07/09/test-joyplot-on-the-flights-data-set/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/09/test-joyplot-on-the-flights-data-set/</guid>
       <description>This week I’ve seen an interting visualization tweeted:
 Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB — Henrik Lindberg (@hnrklndbrg) July 8, 2017   and I thought I’d try to reproduce it on a different dataset for practice.
@@ -39,7 +39,7 @@ Setup I started to get into R around the satRday, and I learned a lot since then
       <title>satRday</title>
       <link>/2017/07/04/satrday/</link>
       <pubDate>Tue, 04 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/2017/07/04/satrday/</guid>
       <description>Test.
 x &amp;lt;- c(0, 2, 4, 8) Math \(f(x) = x\) test.

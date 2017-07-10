@@ -1,8 +1,9 @@
-<link rel='icon' href='{{ ( or .Site.Params.favicon "favicon.ico" ) | relURL }}'>
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Catamaran|Inconsolata|Lato:400i'>
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+{{ if and (not .Params.disable_highlight) (in (string .Content) "</pre>") }}
+{{ $highTheme := .Site.Params.highlightjsTheme }}
+{{ with .Site.Params.highlightjsVersion }}
+<link href='{{ $.Site.Params.highlightjsCDN | default "//cdn.bootcss.com" }}/highlight.js/{{ . }}/styles/{{ $highTheme }}.min.css' rel='stylesheet' type='text/css' />
+{{ end }}
+{{ end }}
 {{ if and (not .Params.disable_highlight) (in (string .Content) "</pre>") }}
 {{ $highVer := .Site.Params.highlightjsVersion }}
 {{ $highCDN := (.Site.Params.highlightjsCDN | default "//cdn.bootcss.com") }}
@@ -15,8 +16,3 @@
 <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
 {{ end }}
 {{ end }}
-<link rel='stylesheet' href='{{ print "css/" .Site.Data.assets.main.css | relURL }}'>
-{{ range .Site.Params.customCSS }}
-  <link rel='stylesheet' href='{{ . | relURL }}'>
-{{ end }}
-{{ template "_internal/google_analytics_async.html" . }}
