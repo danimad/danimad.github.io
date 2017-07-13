@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Abgründe</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <managingEditor>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</managingEditor>
+    <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
     <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
     <lastBuildDate>Wed, 12 Jul 2017 00:00:00 +0000</lastBuildDate>
     
@@ -17,7 +17,7 @@
       <title>Draft</title>
       <link>/tags/draft/</link>
       <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/tags/draft/</guid>
       <description></description>
     </item>

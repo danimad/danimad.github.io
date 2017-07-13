@@ -138,8 +138,9 @@ eclipse &lt;- ggplot() +
         title = element_blank(),
         panel.background = element_blank())
 
-# I save it to png first so ggplot2 renders it the same on all of my computers
-ggsave(paste0(root, img_tmp, &quot;eclipse.png&quot;), eclipse,
-       width = 12, height = 8)
-knitr::include_graphics(paste0(root, img_tmp, &quot;eclipse.png&quot;))</code></pre>
-<p><img src="/Users/danimad/Dropbox/Projects/2017-07-04_blog/tmp/img/eclipse.png" width="3600" /></p>
+eclipse</code></pre>
+<p><img src="/post/2017-07-12-recreating-washing-post-s-solar-eclipse-plot-in-r_files/figure-html/plotting-1.png" /><!-- --></p>
+<pre class="r"><code># I save it to png first so ggplot2 renders it the same on all of my computers
+# ggsave(paste0(root, img_tmp, &quot;eclipse.png&quot;), eclipse,
+#        width = 12, height = 8)
+# knitr::include_graphics(paste0(root, img_tmp, &quot;eclipse.png&quot;))</code></pre>
