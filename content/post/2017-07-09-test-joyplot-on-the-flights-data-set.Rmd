@@ -106,6 +106,8 @@ flights <- flights %>%
 
 Next I copied the visualization code from the original author's code, and changed the variables.
 ```{r, fig.cap="Shipped cargo weigth to the top 25 countries"}
+viz_cols <- quos("nbr_of_passengers", "cargo_weight")
+
 flights %>%
   group_by(country) %>%
   arrange(years) %>%
