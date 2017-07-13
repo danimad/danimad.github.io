@@ -8,10 +8,21 @@
     <language>en</language>
     <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
     <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
-    <lastBuildDate>Sun, 09 Jul 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 12 Jul 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Recreating Washing Post&#39;s solar eclipse plot in R</title>
+      <link>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</link>
+      <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <guid>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</guid>
+      <description>I will continue copycatting visualization in this post.
+This I seen the following visualization from a couple of difference sources:
+Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7 — Teddy Amenabar (@TeddyAmen) July 10, 2017   I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. Disclaimer: I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</description>
+    </item>
     
     <item>
       <title>Test joyplot on the flights data set</title>
@@ -29,7 +40,7 @@ Setup First I load the packages with the pacman package.</description>
       <title>Visualizing the flights data from the satRday Visualizaiton Challenge</title>
       <link>/2017/07/06/satrday_flights_analysis/</link>
       <pubDate>Thu, 06 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/06/satrday_flights_analysis/</guid>
       <description>The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.
 Setup I started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.</description>
@@ -39,7 +50,7 @@ Setup I started to get into R around the satRday, and I learned a lot since then
       <title>satRday</title>
       <link>/2017/07/04/satrday/</link>
       <pubDate>Tue, 04 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/04/satrday/</guid>
       <description>Test.
 x &amp;lt;- c(0, 2, 4, 8) Math \(f(x) = x\) test.

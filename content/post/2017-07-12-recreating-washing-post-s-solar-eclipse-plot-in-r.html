@@ -1,0 +1,145 @@
+---
+title: Recreating Washing Post's solar eclipse plot in R
+author: Daniel Berecz
+date: '2017-07-12'
+slug: recreating-washing-post-s-solar-eclipse-plot-in-r
+categories:
+  - dataviz
+  - rstats
+tags: [draft]
+---
+
+
+
+<p>I will continue copycatting visualization in this post.<br />
+This I seen the following visualization from a couple of difference sources:</p>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+Oh, this is cool. <a href="https://t.co/eCSKI6ag3P">https://t.co/eCSKI6ag3P</a> <a href="https://t.co/BoBlMjZGV7">pic.twitter.com/BoBlMjZGV7</a>
+</p>
+— Teddy Amenabar (<span class="citation">@TeddyAmen</span>) <a href="https://twitter.com/TeddyAmen/status/884462040106119168">July 10, 2017</a>
+</blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. <em>Disclaimer:</em> I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</p>
+<pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
+pacman::p_load(rprojroot,
+               tidyverse,
+               purrr,
+               splancs,
+               data.table,
+               knitr)
+
+# setting project root, and creating temp folder for images
+root &lt;- find_root(is_rstudio_project)
+
+opts_knit$set(root.dir = root)
+
+img_tmp &lt;- &quot;/tmp/img/&quot;
+dir.create(paste0(root, img_tmp), recursive = TRUE)
+
+# eclipse line parameters
+line_int &lt;- 7
+line_slope &lt;- -0.3
+
+# min-max of the longitudes and latitudes for the map
+long_min &lt;- -125
+long_max &lt;- -67
+lat_min &lt;- 25.75
+lat_max &lt;- 49
+  
+# parameters for the eclipse grid
+long_pack &lt;- 1.1
+lat_pack &lt;- long_pack * 0.9
+
+# creating eclipse grid
+long_coords &lt;- seq(from = long_min, to = long_max, by = long_pack)
+lat_coords &lt;- seq(from = lat_min, to = lat_max, by = lat_pack)
+points &lt;- data.table(CJ(long = long_coords, lat = lat_coords))
+
+# shifting every even row horizontally
+long_to_shift &lt;- seq(from = lat_min, to = lat_max, by = lat_pack * 2)
+points[points$lat %in% long_to_shift, long := long + (long_pack/2)]</code></pre>
+<p>The basics of the visualization seems pretty easy, you creates eclipses with differnt occlusions on a grid. First I thougth it would be difficult to do this properly, so I wanted to use emojis or unicode for it. Alas I couldn’t plot the special characters on the plot, which was ultimatelly fortunate, because the next day I had an idea for a real neat sollution. I plot two point in a grid point, one for the sun, on for the moon, and I offset one by a given number. For this offset I used the distance from the eclipse line, which I calculated below with the function borrowed from [stackoverflow][dist_fun]. I scale this distance to a <span class="math inline">\([0,1]\)</span> range, which I can multiple up later so that it fits with the plotted point’s size.</p>
+<pre class="r"><code># from: https://stackoverflow.com/questions/35194048/using-r-how-to-calculate-the-distance-from-one-point-to-a-line
+dist2d &lt;- function(a,b,c) {
+  v1 &lt;- c - b
+  v2 &lt;- b - a
+  m &lt;- cbind(v1,v2)
+  d &lt;- abs(det(m))/sqrt(sum(v1*v1))
+} 
+
+line_left &lt;- c(long_min, long_min * line_slope + line_int)
+line_right &lt;- c(long_max, long_max * line_slope + line_int)
+
+# map from: http://eriqande.github.io/rep-res-web/lectures/making-maps-with-r.html 
+usa &lt;- map_data(&quot;usa&quot;)
+
+# keep only grid point that are inside the country
+# from: https://stackoverflow.com/questions/17571602/r-filter-coordinates
+points &lt;- points[inpip(points[,c(&quot;long&quot;, &quot;lat&quot;)], usa[,c(&quot;long&quot;,&quot;lat&quot;)]),]
+
+# calcualting distance from the eclipse line for every grid point
+points$dist &lt;- map2_dbl(.x = points$long, .y = points$lat,
+                        ~ dist2d(c(.x, .y), line_left, line_right))
+
+# scale point distance to [0,1]
+# from: https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points/5468527#5468527
+scaled &lt;- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+points$dist_scaled &lt;- scaled(points$dist)</code></pre>
+<p>Two tricks I had to use were the following, first I had to filter the point that are inside of the map, and secondly in the original plot the eclipses “below” the eclipse line deviated in a differnt directiont that those that are “above” it. For this I created two filters. For both I used the <code>inpip</code> function from the <code>splancs</code> package. This filters points by looking if there are inside a polygon or not. First I filtered with the US map polygon, and in the second filter I created a polygon that encompases the area above the line. This was a pretty elegant sollution in the end, because at first I wanted to implement it with a signed distance function.</p>
+<pre class="r"><code># lower triangle for point that are &quot;under&quot; the line
+upper_poly &lt;- data.table(x = c(long_min, long_min, long_max, long_max),
+                         y = c(lat_max, line_left[2], line_right[2], lat_max))
+
+points[inpip(points[,c(&quot;long&quot;, &quot;lat&quot;)], upper_poly),
+       dist_scaled := dist_scaled * -1]
+
+# create eclipse line manually
+ecl_l &lt;- -124
+ecl_r &lt;- -81
+ecl_line &lt;- data.table(x = c(ecl_l,
+                             ecl_r),
+                       y = c(ecl_l * line_slope + line_int,
+                             ecl_r * line_slope + line_int))</code></pre>
+<p>Finally I plotted the result:</p>
+<pre class="r"><code># plot params
+bias &lt;- 0.35
+point_size &lt;- long_pack * 2
+
+eclipse &lt;- ggplot() +
+  # US map
+  geom_polygon(data = usa, aes(x=long, y = lat, group = group),
+               fill = &quot;#221a38&quot;) +
+  coord_fixed(1.2) +
+  # manual eclipse line
+  geom_path(data = ecl_line, aes(x = x , y = y), color = &quot;#201216&quot;, size = 6) +
+  # sun halo
+  geom_point(data = points, aes(x = long, y = lat), size = point_size*1.15,
+             alpha = 0.2, color = &quot;#ffebdb&quot;) +
+  geom_point(data = points, aes(x = long, y = lat), size = point_size*1.3,
+             alpha = 0.1, color = &quot;#ffebdb&quot;) +
+  # sun
+  geom_point(data = points, aes(x = long, y = lat),
+             size = point_size, color = &quot;#ffebdb&quot;) +
+  # moon
+  geom_point(data = points, aes(x = long,
+                                y = lat + bias * dist_scaled),
+             size = point_size,  color = &quot;#221a38&quot;) +
+  # eclipse line annotation
+  annotate(&quot;text&quot;, x = ecl_line[2,1] + 3.8, y = ecl_line[2,2] - 1.1,
+           label = &quot;\u2192 Path of totality&quot;,
+           color = &quot;#C0977A&quot;, fontface = 2, angle = -10) +
+  coord_map(&quot;albers&quot;, lat0=30, lat1=40) +
+  # from: https://stackoverflow.com/questions/14313285/ggplot2-theme-with-no-axes-or-grid
+  theme(line = element_blank(),
+        text = element_blank(),
+        title = element_blank(),
+        panel.background = element_blank())
+
+# I save it to png first so ggplot2 renders it the same on all of my computers
+ggsave(paste0(root, img_tmp, &quot;eclipse.png&quot;), eclipse,
+       width = 12, height = 8)
+knitr::include_graphics(paste0(root, img_tmp, &quot;eclipse.png&quot;))</code></pre>
+<p><img src="/Users/danimad/Dropbox/Projects/2017-07-04_blog/tmp/img/eclipse.png" width="3600" /></p>
