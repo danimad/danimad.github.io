@@ -17,10 +17,20 @@
       <title>Talks</title>
       <link>/page/talks/</link>
       <pubDate>Wed, 05 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/page/talks/</guid>
       <description>A list of talks I gave:
 2017, Mar 02 &amp;nbsp; PWL meetup: The Essence of Functional Programming (link)</description>
+    </item>
+    
+    <item>
+      <title>Tidy text analysis of the leaked Trump phone calls</title>
+      <link>/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/</link>
+      <pubDate>Mon, 07 Aug 2017 00:00:00 +0000</pubDate>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <guid>/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/</guid>
+      <description>Last week I read the leaked phone calls between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the Tidy Textmining in R book, so here we are.
+if (!require(&amp;quot;pacman&amp;quot;)) install.packages(&amp;quot;pacman&amp;quot;)pacman::p_load(rprojroot,tidyverse,ggplot2,dplyr,rvest,stringi,tidytext,knitr)## package &amp;#39;haven&amp;#39; successfully unpacked and MD5 sums checked## package &amp;#39;tidyverse&amp;#39; successfully unpacked and MD5 sums checked## ## The downloaded binary packages are in## C:\Users\daniel.</description>
     </item>
     
     <item>
@@ -31,19 +41,19 @@
       <guid>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</guid>
       <description>I will continue copycatting visualization in this post.
 This I seen the following visualization from a couple of difference sources:
-Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7 — Teddy Amenabar (@TeddyAmen) July 10, 2017   I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. Disclaimer: I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</description>
+Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7— Teddy Amenabar (@TeddyAmen) July 10, 2017I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. Disclaimer: I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</description>
     </item>
     
     <item>
       <title>Test joyplot on the flights data set</title>
       <link>/2017/07/09/test-joyplot-on-the-flights-data-set/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/09/test-joyplot-on-the-flights-data-set/</guid>
       <description>This week I’ve seen an interting visualization tweeted:
-Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB — Henrik Lindberg (@hnrklndbrg) July 8, 2017   and I thought I’d try to reproduce it on a different dataset for practice.
+Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB— Henrik Lindberg (@hnrklndbrg) July 8, 2017and I thought I’d try to reproduce it on a different dataset for practice.
 You can find the original repo here.
-Setup First I load the packages with the pacman package.</description>
+SetupFirst I load the packages with the pacman package.</description>
     </item>
     
     <item>
@@ -53,14 +63,14 @@ Setup First I load the packages with the pacman package.</description>
       <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/06/satrday_flights_analysis/</guid>
       <description>The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.
-Setup I started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.</description>
+SetupI started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.</description>
     </item>
     
     <item>
       <title>About</title>
       <link>/page/about/</link>
       <pubDate>Wed, 05 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/page/about/</guid>
       <description>About the site This will be a blog.
 Setup This was built with Hugo. I used a modified version of the Minimo theme.</description>
@@ -73,9 +83,9 @@ Setup This was built with Hugo. I used a modified version of the Minimo theme.</
       <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/04/satrday/</guid>
       <description>Test.
-x &amp;lt;- c(0, 2, 4, 8) Math \(f(x) = x\) test.
+x &amp;lt;- c(0, 2, 4, 8)Math \(f(x) = x\) test.
 And more math test:
-\[ f(x) = \int_0^1 g(x) \, \text{dx} \]</description>
+\[f(x) = \int_0^1 g(x) \, \text{dx}\]</description>
     </item>
     
   </channel>

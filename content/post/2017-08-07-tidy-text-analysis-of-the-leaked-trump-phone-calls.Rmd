@@ -1,0 +1,109 @@
+---
+title: Tidy text analysis of the leaked Trump phone calls
+author: Daniel Berecz
+date: '2017-08-07'
+slug: tidy-text-analysis-of-the-leaked-trump-phone-calls
+categories:
+  - text_mining
+tags:
+  - draft
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      include = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.retina = TRUE
+                      )
+```
+
+Last week I read the [leaked phone calls][wapo] between Donald Trump, and the
+leaders of Mexico, and Australia, and I was again shocked a bit, by the
+president's command of the English language. Coincidently, I wanted to read, and
+try out the things in the [Tidy Textmining in R][tidy_text] book, so here we are.
+
+```{r params}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(rprojroot,
+               tidyverse,
+               ggplot2,
+               dplyr,
+               rvest,
+               stringi,
+               tidytext,
+               knitr)
+
+# setting project root, and creating temp folder for images
+# root <- find_root(is_rstudio_project)
+```
+
+For start I downloaded the text for both conversations seperately. The
+Washington Post's developers created a pretty great structure for the
+transcript's site. Everything is neatly nested hiearhically. For example there
+is a `mexico` class, which has a `transcript`, and `transcript-container` class
+in it, and inside them there is a seperate class for the different leaders.  
+I used the `rvest` package to download the text from the site. As you can see
+from the code, getting the required parts of the text was pretty straight
+forward, and thanks to the site's structure, the code is pretty expressive.  
+I downloaded only Trump's sentences, and I downloaded them seperately for both
+calls. I created an [unary function][unary], because I wanted to apply the same
+transformations on both text, but didn't want to repeat code.
+
+```{r download}
+transcripts <- read_html("https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/")
+
+mexico <- transcripts %>%
+  html_nodes(".mexico .trump p") %>%
+  html_text()
+
+australia <- transcripts %>%
+  html_nodes(".australia .trump p") %>%
+  html_text()
+
+clean <- . %>%
+  stri_trim() %>%
+  stri_trans_tolower() %>%
+  data.frame(sentences = ., stringsAsFactors = FALSE) %>%
+  unnest_tokens(word, sentences) %>%
+  anti_join(stop_words) %>%
+  count(word, sort = TRUE)
+```
+
+I also created a new column, which shows which sentence belongs to which call.
+After this I joined the two conversations back together.  
+Maybe one could do the above thing more elegantly, for example use `apply` and
+NSE in a creative way (i.e. create a list with the country names, use apply on
+them and the pipe sequence, and pass them to the new column). I might do this in
+the future, if it's feasible.
+
+```{r table-join}
+mexico_word_counts <- mexico %>% clean %>% mutate(call = "Mexico")
+australia_word_counts <- australia %>% clean %>% mutate(call = "Australia")
+
+word_counts <- rbind(mexico_word_counts,
+                     australia_word_counts)
+
+```
+
+Next, I filtered out the 15 most used words by Trump, and created a bar chart for them:
+
+```{r word-freq-viz}
+word_counts %>%
+  group_by(call) %>%
+  top_n(15, n) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n, fill = call)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ call)
+```
+
+
+
+[wapo]: https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/
+[tidy_text]: http://tidytextmining.com/tidytext.html
+[unary]: https://jennybc.github.io/purrr-tutorial/pt00_gotchas.html

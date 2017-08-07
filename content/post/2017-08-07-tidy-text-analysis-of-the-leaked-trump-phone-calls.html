@@ -1,0 +1,68 @@
+---
+title: Tidy text analysis of the leaked Trump phone calls
+author: Daniel Berecz
+date: '2017-08-07'
+slug: tidy-text-analysis-of-the-leaked-trump-phone-calls
+categories:
+  - text_mining
+tags:
+  - draft
+---
+
+
+
+<p>Last week I read the <a href="https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/">leaked phone calls</a> between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the <a href="http://tidytextmining.com/tidytext.html">Tidy Textmining in R</a> book, so here we are.</p>
+<pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
+pacman::p_load(rprojroot,
+               tidyverse,
+               ggplot2,
+               dplyr,
+               rvest,
+               stringi,
+               tidytext,
+               knitr)</code></pre>
+<pre><code>## package &#39;haven&#39; successfully unpacked and MD5 sums checked
+## package &#39;tidyverse&#39; successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\daniel.berecz\AppData\Local\Temp\Rtmpw768GJ\downloaded_packages</code></pre>
+<pre class="r"><code># setting project root, and creating temp folder for images
+# root &lt;- find_root(is_rstudio_project)</code></pre>
+<p>For start I downloaded the text for both conversations seperately. The Washington Post’s developers created a pretty great structure for the transcript’s site. Everything is neatly nested hiearhically. For example there is a <code>mexico</code> class, which has a <code>transcript</code>, and <code>transcript-container</code> class in it, and inside them there is a seperate class for the different leaders.<br />
+I used the <code>rvest</code> package to download the text from the site. As you can see from the code, getting the required parts of the text was pretty straight forward, and thanks to the site’s structure, the code is pretty expressive.<br />
+I downloaded only Trump’s sentences, and I downloaded them seperately for both calls. I created an <a href="https://jennybc.github.io/purrr-tutorial/pt00_gotchas.html">unary function</a>, because I wanted to apply the same transformations on both text, but didn’t want to repeat code.</p>
+<pre class="r"><code>transcripts &lt;- read_html(&quot;https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/&quot;)
+
+mexico &lt;- transcripts %&gt;%
+  html_nodes(&quot;.mexico .trump p&quot;) %&gt;%
+  html_text()
+
+australia &lt;- transcripts %&gt;%
+  html_nodes(&quot;.australia .trump p&quot;) %&gt;%
+  html_text()
+
+clean &lt;- . %&gt;%
+  stri_trim() %&gt;%
+  stri_trans_tolower() %&gt;%
+  data.frame(sentences = ., stringsAsFactors = FALSE) %&gt;%
+  unnest_tokens(word, sentences) %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(word, sort = TRUE)</code></pre>
+<p>I also created a new column, which shows which sentence belongs to which call. After this I joined the two conversations back together.<br />
+Maybe one could do the above thing more elegantly, for example use <code>apply</code> and NSE in a creative way (i.e. create a list with the country names, use apply on them and the pipe sequence, and pass them to the new column). I might do this in the future, if it’s feasible.</p>
+<pre class="r"><code>mexico_word_counts &lt;- mexico %&gt;% clean %&gt;% mutate(call = &quot;Mexico&quot;)
+australia_word_counts &lt;- australia %&gt;% clean %&gt;% mutate(call = &quot;Australia&quot;)
+
+word_counts &lt;- rbind(mexico_word_counts,
+                     australia_word_counts)</code></pre>
+<p>Next, I filtered out the 15 most used words by Trump, and created a bar chart for them:</p>
+<pre class="r"><code>word_counts %&gt;%
+  group_by(call) %&gt;%
+  top_n(15, n) %&gt;%
+  ungroup() %&gt;%
+  mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(x = word, y = n, fill = call)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ call)</code></pre>
+<p><img src="/post/2017-08-07-tidy-text-analysis-of-the-leaked-trump-phone-calls_files/figure-html/word-freq-viz-1.png" /><!-- --></p>

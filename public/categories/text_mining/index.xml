@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Draft on Abgründe</title>
-    <link>/tags/draft/</link>
-    <description>Recent content in Draft on Abgründe</description>
+    <title>Text_mining on Abgründe</title>
+    <link>/categories/text_mining/</link>
+    <description>Recent content in Text_mining on Abgründe</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
     <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
     <lastBuildDate>Mon, 07 Aug 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/draft/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/text_mining/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,17 +21,6 @@
       <guid>/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/</guid>
       <description>Last week I read the leaked phone calls between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the Tidy Textmining in R book, so here we are.
 if (!require(&amp;quot;pacman&amp;quot;)) install.packages(&amp;quot;pacman&amp;quot;)pacman::p_load(rprojroot,tidyverse,ggplot2,dplyr,rvest,stringi,tidytext,knitr)## package &amp;#39;haven&amp;#39; successfully unpacked and MD5 sums checked## package &amp;#39;tidyverse&amp;#39; successfully unpacked and MD5 sums checked## ## The downloaded binary packages are in## C:\Users\daniel.</description>
-    </item>
-    
-    <item>
-      <title>Recreating Washing Post&#39;s solar eclipse plot in R</title>
-      <link>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</link>
-      <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
-      <guid>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</guid>
-      <description>I will continue copycatting visualization in this post.
-This I seen the following visualization from a couple of difference sources:
-Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7— Teddy Amenabar (@TeddyAmen) July 10, 2017I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. Disclaimer: I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</description>
     </item>
     
   </channel>
