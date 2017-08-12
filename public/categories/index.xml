@@ -6,8 +6,8 @@
     <description>Recent content in Categories on Abgründe</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <managingEditor>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</managingEditor>
-    <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
+    <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
+    <webMaster>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</webMaster>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -25,8 +25,17 @@
       <title>Rstats</title>
       <link>/categories/rstats/</link>
       <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/categories/rstats/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Text_mining</title>
+      <link>/categories/text_mining/</link>
+      <pubDate>Mon, 07 Aug 2017 00:00:00 +0000</pubDate>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <guid>/categories/text_mining/</guid>
       <description></description>
     </item>
     

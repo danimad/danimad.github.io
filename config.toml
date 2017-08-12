@@ -20,7 +20,7 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
   highlightjsVersion = "9.12.0"
   highlightjsCDN = "//cdnjs.cloudflare.com/ajax/libs"
   highlightjsLang = ["r"]
-  highlightjsTheme = "paradiso-dark"
+  highlightjsTheme = "paraiso-dark"
 
   MathJaxCDN = "//cdnjs.cloudflare.com/ajax/libs"
   MathJaxVersion = "2.7.1"

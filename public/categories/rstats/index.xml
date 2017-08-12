@@ -6,7 +6,7 @@
     <description>Recent content in Rstats on Abgründe</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <managingEditor>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</managingEditor>
+    <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
     <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
     <lastBuildDate>Wed, 12 Jul 2017 00:00:00 +0000</lastBuildDate>
     
@@ -21,19 +21,19 @@
       <guid>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</guid>
       <description>I will continue copycatting visualization in this post.
 This I seen the following visualization from a couple of difference sources:
-Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7 — Teddy Amenabar (@TeddyAmen) July 10, 2017   I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. Disclaimer: I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</description>
+Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7— Teddy Amenabar (@TeddyAmen) July 10, 2017I thought this would also be a good vis to recreate. I had a couple of different ideas on how to recreate it, but little did I know how difficult it would be. Disclaimer: I created this purely with geometrically, it doesn’t represent the true path of of an eclipse.</description>
     </item>
     
     <item>
       <title>Test joyplot on the flights data set</title>
       <link>/2017/07/09/test-joyplot-on-the-flights-data-set/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/2017/07/09/test-joyplot-on-the-flights-data-set/</guid>
       <description>This week I’ve seen an interting visualization tweeted:
-Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB — Henrik Lindberg (@hnrklndbrg) July 8, 2017   and I thought I’d try to reproduce it on a different dataset for practice.
+Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB— Henrik Lindberg (@hnrklndbrg) July 8, 2017and I thought I’d try to reproduce it on a different dataset for practice.
 You can find the original repo here.
-Setup First I load the packages with the pacman package.</description>
+SetupFirst I load the packages with the pacman package.</description>
     </item>
     
   </channel>

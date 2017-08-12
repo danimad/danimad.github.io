@@ -1,20 +1,5 @@
 <link rel='icon' href='{{ ( or .Site.Params.favicon "favicon.ico" ) | relURL }}'>
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Catamaran|Inconsolata|Lato:400i'>
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-{{ if and (not .Params.disable_highlight) (in (string .Content) "</pre>") }}
-{{ $highVer := .Site.Params.highlightjsVersion }}
-{{ $highCDN := (.Site.Params.highlightjsCDN | default "//cdn.bootcss.com") }}
-{{ if (not (eq $highVer "")) }}
-<script src="{{ $highCDN }}/highlight.js/{{ $highVer }}/highlight.min.js"></script>
-{{ $.Scratch.Set "highLangs" .Site.Params.highlightjsLang }}
-{{ range .Params.highlightjsLang }}{{ $.Scratch.Add "highLangs" . }}{{ end }}
-{{ range ($.Scratch.Get "highLangs") }}
-<script src="{{ $highCDN }}/highlight.js/{{ $highVer }}/languages/{{ . }}.min.js"></script>{{ end }}
-<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-{{ end }}
-{{ end }}
 <link rel='stylesheet' href='{{ print "css/" .Site.Data.assets.main.css | relURL }}'>
 {{ range .Site.Params.customCSS }}
   <link rel='stylesheet' href='{{ . | relURL }}'>
