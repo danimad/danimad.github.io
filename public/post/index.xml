@@ -38,7 +38,7 @@ Oh, this is cool. https://t.co/eCSKI6ag3P pic.twitter.com/BoBlMjZGV7— Teddy A
       <title>Test joyplot on the flights data set</title>
       <link>/2017/07/09/test-joyplot-on-the-flights-data-set/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/09/test-joyplot-on-the-flights-data-set/</guid>
       <description>This week I’ve seen an interting visualization tweeted:
 Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB— Henrik Lindberg (@hnrklndbrg) July 8, 2017and I thought I’d try to reproduce it on a different dataset for practice.
@@ -50,7 +50,7 @@ SetupFirst I load the packages with the pacman package.</description>
       <title>Visualizing the flights data from the satRday Visualizaiton Challenge</title>
       <link>/2017/07/06/satrday_flights_analysis/</link>
       <pubDate>Thu, 06 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/2017/07/06/satrday_flights_analysis/</guid>
       <description>The first satRday was held in Budapest the last year. There was a Visualization Challenge and I decided to participate on it. Unfortunatelly, because of technical difficulties, I couldn’t send my work in before the deadline, but I often come back to this data set, for testing out new things like this blog.
 SetupI started to get into R around the satRday, and I learned a lot since then, so I decided I update the a code a bit.</description>
