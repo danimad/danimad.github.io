@@ -1,0 +1,51 @@
+---
+title: The one where I could use backticked reference in real code
+author: 'Dániel Berecz'
+date: '2017-08-20'
+slug: the-one-where-i-could-use-backticked-reference-in-real-code
+categories:
+  - rstats
+tags:
+  - draft
+---
+
+I alway liked that in Haskell you can inflix a function with backticks like this:
+
+```{r, engine='haskell', eval=FALSE}
+take 5 [1..]
+
+-- is the same as
+
+5 `take` [1..]
+```
+
+You can do a similar thing in R. In R, when you surround for example an
+operator, like `[]`, or `+`, you can use it like a normal function. This is
+because these operators are also [function calls][purrr_tut].  
+Until now I couldn't really use this in real life code, but the other day I had
+to scrape wikipedia and it was pretty handy.
+
+```{r, warning=FALSE, error=FALSE}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(rvest)
+})
+
+# Wiki page for European cities
+cities_wiki <- "https://en.wikipedia.org/wiki/List_of_European_cities_by_population_within_city_limits"
+
+# rvest function to read html
+eu_cities <- read_html(cities_wiki)
+
+# take the table on the site and extract the cities
+cities <- eu_cities %>%
+  html_nodes("table") %>%
+  html_table() %>%
+  `[[`(2) %>% 
+  `$`(City)
+
+head(cities)
+```
+
+
+[purrr_tut]: https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html

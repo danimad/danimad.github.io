@@ -6,8 +6,8 @@
     <description>Recent content in Text_mining on Abgründe</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <managingEditor>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</managingEditor>
-    <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
+    <managingEditor>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</managingEditor>
+    <webMaster>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</webMaster>
     <lastBuildDate>Mon, 07 Aug 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/text_mining/index.xml" rel="self" type="application/rss+xml" />
@@ -17,10 +17,10 @@
       <title>Tidy text analysis of the leaked Trump phone calls</title>
       <link>/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/</link>
       <pubDate>Mon, 07 Aug 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/</guid>
       <description>Last week I read the leaked phone calls between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the Tidy Textmining in R book, so here we are.
-if (!require(&amp;quot;pacman&amp;quot;)) install.packages(&amp;quot;pacman&amp;quot;)pacman::p_load(rprojroot,tidyverse,ggplot2,dplyr,rvest,stringi,tidytext,knitr)## package &amp;#39;haven&amp;#39; successfully unpacked and MD5 sums checked## package &amp;#39;tidyverse&amp;#39; successfully unpacked and MD5 sums checked## ## The downloaded binary packages are in## C:\Users\daniel.</description>
+if (!require(&amp;quot;pacman&amp;quot;)) install.packages(&amp;quot;pacman&amp;quot;) pacman::p_load(rprojroot, tidyverse, ggplot2, dplyr, rvest, stringi, tidytext, knitr) # setting project root, and creating temp folder for images # root &amp;lt;- find_root(is_rstudio_project) For start I downloaded the text for both conversations seperately.</description>
     </item>
     
   </channel>

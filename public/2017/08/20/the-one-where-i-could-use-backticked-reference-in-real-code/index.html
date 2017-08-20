@@ -4,21 +4,23 @@
 <head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='Last week I read the leaked phone calls between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the Tidy Textmining in R book, so here we are.
-if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p_load(rprojroot, tidyverse, ggplot2, dplyr, rvest, stringi, tidytext, knitr) # setting project root, and creating temp folder for images # root &lt;- find_root(is_rstudio_project) For start I downloaded the text for both conversations seperately.'>
+<meta name='description' content='I alway liked that in Haskell you can inflix a function with backticks like this:
+take 5 [1..] -- is the same as 5 `take` [1..] You can do a similar thing in R. In R, when you surround for example an operator, like [], or &#43;, you can use it like a normal function. This is because these operators are also function calls.
+Until now I couldn’t really use this in real life code, but the other day I had to scrape wikipedia and it was pretty handy.'>
 
-<meta property='og:title' content='Tidy text analysis of the leaked Trump phone calls • Dániel Berecz'>
-<meta property='og:description' content='Last week I read the leaked phone calls between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the Tidy Textmining in R book, so here we are.
-if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p_load(rprojroot, tidyverse, ggplot2, dplyr, rvest, stringi, tidytext, knitr) # setting project root, and creating temp folder for images # root &lt;- find_root(is_rstudio_project) For start I downloaded the text for both conversations seperately.'>
-<meta property='og:url' content='/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/'>
+<meta property='og:title' content='The one where I could use backticked reference in real code • Dániel Berecz'>
+<meta property='og:description' content='I alway liked that in Haskell you can inflix a function with backticks like this:
+take 5 [1..] -- is the same as 5 `take` [1..] You can do a similar thing in R. In R, when you surround for example an operator, like [], or &#43;, you can use it like a normal function. This is because these operators are also function calls.
+Until now I couldn’t really use this in real life code, but the other day I had to scrape wikipedia and it was pretty handy.'>
+<meta property='og:url' content='/2017/08/20/the-one-where-i-could-use-backticked-reference-in-real-code/'>
 <meta property='og:site_name' content='Abgründe'>
-<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/48048310a61a68060cb1c9fe1cd05613?s=256'><meta property='article:section' content='Post'><meta property='article:tag' content='draft'><meta property='article:published_time' content='2017-08-07T00:00:00Z'/><meta property='article:modified_time' content='2017-08-07T00:00:00Z'/>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/48048310a61a68060cb1c9fe1cd05613?s=256'><meta property='article:section' content='Post'><meta property='article:tag' content='draft'><meta property='article:published_time' content='2017-08-20T00:00:00Z'/><meta property='article:modified_time' content='2017-08-20T00:00:00Z'/>
 
 <meta name="generator" content="Hugo 0.26" />
 
   <base href='/'>
-  <title>Tidy text analysis of the leaked Trump phone calls • Dániel Berecz</title>
-  <link rel='canonical' href='/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/'>
+  <title>The one where I could use backticked reference in real code • Dániel Berecz</title>
+  <link rel='canonical' href='/2017/08/20/the-one-where-i-could-use-backticked-reference-in-real-code/'>
   <link href='' rel='alternate' type='application/rss+xml' title='Abgründe' />
   <link rel='icon' href='/favicon.ico'>
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Catamaran|Inconsolata|Lato:400i'>
@@ -45,6 +47,17 @@ if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p
 
 
   
+<script src="/js/math-code.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 </head>
 
 
@@ -88,7 +101,7 @@ if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p
   <article lang='en' class='entry'>
     <header class='entry-header'>
   <div class='entry-info'>
-    <h1 class='entry-title title'>Tidy text analysis of the leaked Trump phone calls</h1>
+    <h1 class='entry-title title'>The one where I could use backticked reference in real code</h1>
     
   </div>
   
@@ -104,7 +117,7 @@ if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p
 </svg>
 
     <span class='screen-reader'>Posted on </span>
-    <time class='date' datetime='2017-08-07T00:00:00Z'>2017, Aug 07</time>
+    <time class='date' datetime='2017-08-20T00:00:00Z'>2017, Aug 20</time>
   </span>
   
   <span class='byline'>
@@ -125,55 +138,35 @@ if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p
 </header>
 
     <div class='entry-content'>
-  <p>Last week I read the <a href="https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/">leaked phone calls</a> between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the <a href="http://tidytextmining.com/tidytext.html">Tidy Textmining in R</a> book, so here we are.</p>
-<pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
-pacman::p_load(rprojroot,
-               tidyverse,
-               ggplot2,
-               dplyr,
-               rvest,
-               stringi,
-               tidytext,
-               knitr)
+  <p>I alway liked that in Haskell you can inflix a function with backticks like this:</p>
+<pre class="haskell"><code>take 5 [1..]
 
-# setting project root, and creating temp folder for images
-# root &lt;- find_root(is_rstudio_project)</code></pre>
-<p>For start I downloaded the text for both conversations seperately. The Washington Post’s developers created a pretty great structure for the transcript’s site. Everything is neatly nested hiearhically. For example there is a <code>mexico</code> class, which has a <code>transcript</code>, and <code>transcript-container</code> class in it, and inside them there is a seperate class for the different leaders.<br />
-I used the <code>rvest</code> package to download the text from the site. As you can see from the code, getting the required parts of the text was pretty straight forward, and thanks to the site’s structure, the code is pretty expressive.<br />
-I downloaded only Trump’s sentences, and I downloaded them seperately for both calls. I created an <a href="https://jennybc.github.io/purrr-tutorial/pt00_gotchas.html">unary function</a>, because I wanted to apply the same transformations on both text, but didn’t want to repeat code.</p>
-<pre class="r"><code>transcripts &lt;- read_html(&quot;https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/&quot;)
+-- is the same as
 
-mexico &lt;- transcripts %&gt;%
-  html_nodes(&quot;.mexico .trump p&quot;) %&gt;%
-  html_text()
+5 `take` [1..]</code></pre>
+<p>You can do a similar thing in R. In R, when you surround for example an operator, like <code>[]</code>, or <code>+</code>, you can use it like a normal function. This is because these operators are also <a href="https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html">function calls</a>.<br />
+Until now I couldn’t really use this in real life code, but the other day I had to scrape wikipedia and it was pretty handy.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(tidyverse)
+  library(rvest)
+})
 
-australia &lt;- transcripts %&gt;%
-  html_nodes(&quot;.australia .trump p&quot;) %&gt;%
-  html_text()
+# Wiki page for European cities
+cities_wiki &lt;- &quot;https://en.wikipedia.org/wiki/List_of_European_cities_by_population_within_city_limits&quot;
 
-clean &lt;- . %&gt;%
-  data.frame(sentences = ., stringsAsFactors = FALSE) %&gt;%
-  unnest_tokens(word, sentences) %&gt;%
-  anti_join(stop_words) %&gt;%
-  count(word, sort = TRUE)</code></pre>
-<p>I also created a new column, which shows which sentence belongs to which call. After this I joined the two conversations back together.<br />
-Maybe one could do the above thing more elegantly, for example use <code>apply</code> and NSE in a creative way (i.e. create a list with the country names, use apply on them and the pipe sequence, and pass them to the new column). I might do this in the future, if it’s feasible.</p>
-<pre class="r"><code>mexico_word_counts &lt;- mexico %&gt;% clean %&gt;% mutate(call = &quot;Mexico&quot;)
-australia_word_counts &lt;- australia %&gt;% clean %&gt;% mutate(call = &quot;Australia&quot;)
+# rvest function to read html
+eu_cities &lt;- read_html(cities_wiki)
 
-word_counts &lt;- rbind(mexico_word_counts,
-                     australia_word_counts)</code></pre>
-<p>Next, I filtered out the 15 most used words by Trump, and created a bar chart for them:</p>
-<pre class="r"><code>word_counts %&gt;%
-  group_by(call) %&gt;%
-  top_n(15, n) %&gt;%
-  ungroup() %&gt;%
-  mutate(word = reorder(word, n)) %&gt;%
-  ggplot(aes(x = word, y = n, fill = call)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~ call)</code></pre>
-<p><img src="/post/2017-08-07-tidy-text-analysis-of-the-leaked-trump-phone-calls_files/figure-html/word-freq-viz-1.png" /><!-- --></p>
+# take the table on the site and extract the cities
+cities &lt;- eu_cities %&gt;%
+  html_nodes(&quot;table&quot;) %&gt;%
+  html_table() %&gt;%
+  `[[`(2) %&gt;% 
+  `$`(City)
+
+head(cities)</code></pre>
+<pre><code>## [1] &quot;Istanbul[a]&quot;      &quot;Moscow[b]&quot;        &quot;London&quot;          
+## [4] &quot;Saint Petersburg&quot; &quot;Berlin&quot;           &quot;Madrid&quot;</code></pre>
 
 </div>
 
@@ -193,7 +186,7 @@ word_counts &lt;- rbind(mexico_word_counts,
 </svg>
 
   </span>
-  <span class='screen-reader'>Categories: </span><a class='category' href='/categories/text_mining'>text_mining</a></div>
+  <span class='screen-reader'>Categories: </span><a class='category' href='/categories/rstats'>rstats</a></div>
 
     
   
@@ -224,7 +217,7 @@ word_counts &lt;- rbind(mexico_word_counts,
     
 <nav class='entry-nav'>
   <div class='entry-nav-links'><div class='prev-entry'>
-      <a href='/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/'>
+      <a href='/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/'>
         <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <line x1="20" y1="12" x2="4" y2="12"/>
@@ -232,17 +225,7 @@ word_counts &lt;- rbind(mexico_word_counts,
   
 </svg>
  Previous</span>
-        <span class='screen-reader'>Previous post: </span>Recreating Washing Post&#39;s solar eclipse plot in R</a>
-    </div><div class='next-entry'>
-      <a href='/2017/08/20/the-one-where-i-could-use-backticked-reference-in-real-code/'>
-        <span class='screen-reader'>Next post: </span>The one where I could use backticked reference in real code<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <line x1="4" y1="12" x2="20" y2="12"/>
-  <polyline points="14 6 20 12 14 18"/>
-  
-</svg>
-</span>
-      </a>
+        <span class='screen-reader'>Previous post: </span>Tidy text analysis of the leaked Trump phone calls</a>
     </div></div>
 </nav>
 

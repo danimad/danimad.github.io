@@ -5,20 +5,20 @@
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta name='description' content='This week I’ve seen an interting visualization tweeted:
-Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB— Henrik Lindberg (@hnrklndbrg) July 8, 2017and I thought I’d try to reproduce it on a different dataset for practice.
+Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB — Henrik Lindberg (@hnrklndbrg) July 8, 2017   and I thought I’d try to reproduce it on a different dataset for practice.
 You can find the original repo here.
-SetupFirst I load the packages with the pacman package.'>
+Setup First I load the packages with the pacman package.'>
 
 <meta property='og:title' content='Test joyplot on the flights data set • Dániel Berecz'>
 <meta property='og:description' content='This week I’ve seen an interting visualization tweeted:
-Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB— Henrik Lindberg (@hnrklndbrg) July 8, 2017and I thought I’d try to reproduce it on a different dataset for practice.
+Peak time for sports and leisure #dataviz. About time for a joyplot; might do a write-up on them. #rstats code at https://t.co/Q2AgW068Wa pic.twitter.com/SVT6pkB2hB — Henrik Lindberg (@hnrklndbrg) July 8, 2017   and I thought I’d try to reproduce it on a different dataset for practice.
 You can find the original repo here.
-SetupFirst I load the packages with the pacman package.'>
+Setup First I load the packages with the pacman package.'>
 <meta property='og:url' content='/2017/07/09/test-joyplot-on-the-flights-data-set/'>
 <meta property='og:site_name' content='Abgründe'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/48048310a61a68060cb1c9fe1cd05613?s=256'><meta property='article:section' content='Post'><meta property='article:published_time' content='2017-07-09T00:00:00Z'/><meta property='article:modified_time' content='2017-07-09T00:00:00Z'/>
 
-<meta name="generator" content="Hugo 0.24.1" />
+<meta name="generator" content="Hugo 0.26" />
 
   <base href='/'>
   <title>Test joyplot on the flights data set • Dániel Berecz</title>
@@ -223,7 +223,9 @@ flights &lt;- flights %&gt;%
   summarise(nbr_pass = sum(cargo_weight)) %&gt;%
   slice(country %in% top_countries$country)</code></pre>
 <p>Next I copied the visualization code from the original author’s code, and changed the variables.</p>
-<pre class="r"><code>flights %&gt;%
+<pre class="r"><code>viz_cols &lt;- quos(&quot;nbr_of_passengers&quot;, &quot;cargo_weight&quot;)
+
+flights %&gt;%
   group_by(country) %&gt;%
   arrange(years) %&gt;%
   mutate(p_peak = nbr_pass / max(nbr_pass),

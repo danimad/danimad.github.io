@@ -20,13 +20,9 @@ pacman::p_load(rprojroot,
                rvest,
                stringi,
                tidytext,
-               knitr)</code></pre>
-<pre><code>## package &#39;haven&#39; successfully unpacked and MD5 sums checked
-## package &#39;tidyverse&#39; successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-##  C:\Users\daniel.berecz\AppData\Local\Temp\Rtmpw768GJ\downloaded_packages</code></pre>
-<pre class="r"><code># setting project root, and creating temp folder for images
+               knitr)
+
+# setting project root, and creating temp folder for images
 # root &lt;- find_root(is_rstudio_project)</code></pre>
 <p>For start I downloaded the text for both conversations seperately. The Washington Post’s developers created a pretty great structure for the transcript’s site. Everything is neatly nested hiearhically. For example there is a <code>mexico</code> class, which has a <code>transcript</code>, and <code>transcript-container</code> class in it, and inside them there is a seperate class for the different leaders.<br />
 I used the <code>rvest</code> package to download the text from the site. As you can see from the code, getting the required parts of the text was pretty straight forward, and thanks to the site’s structure, the code is pretty expressive.<br />
@@ -42,8 +38,6 @@ australia &lt;- transcripts %&gt;%
   html_text()
 
 clean &lt;- . %&gt;%
-  stri_trim() %&gt;%
-  stri_trans_tolower() %&gt;%
   data.frame(sentences = ., stringsAsFactors = FALSE) %&gt;%
   unnest_tokens(word, sentences) %&gt;%
   anti_join(stop_words) %&gt;%

@@ -64,8 +64,6 @@ australia <- transcripts %>%
   html_text()
 
 clean <- . %>%
-  stri_trim() %>%
-  stri_trans_tolower() %>%
   data.frame(sentences = ., stringsAsFactors = FALSE) %>%
   unnest_tokens(word, sentences) %>%
   anti_join(stop_words) %>%

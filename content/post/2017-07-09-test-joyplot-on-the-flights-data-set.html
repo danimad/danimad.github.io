@@ -94,7 +94,9 @@ flights &lt;- flights %&gt;%
   summarise(nbr_pass = sum(cargo_weight)) %&gt;%
   slice(country %in% top_countries$country)</code></pre>
 <p>Next I copied the visualization code from the original author’s code, and changed the variables.</p>
-<pre class="r"><code>flights %&gt;%
+<pre class="r"><code>viz_cols &lt;- quos(&quot;nbr_of_passengers&quot;, &quot;cargo_weight&quot;)
+
+flights %&gt;%
   group_by(country) %&gt;%
   arrange(years) %&gt;%
   mutate(p_peak = nbr_pass / max(nbr_pass),
