@@ -48,7 +48,7 @@ if (!require(&amp;quot;pacman&amp;quot;)) install.packages(&amp;quot;pacman&amp;
       <title>Recreating Washing Post&#39;s solar eclipse plot in R</title>
       <link>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</link>
       <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
       <guid>/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/</guid>
       <description>I will continue copycatting visualization in this post.
 This I seen the following visualization from a couple of difference sources:
@@ -81,7 +81,7 @@ Setup I started to get into R around the satRday, and I learned a lot since then
       <title>About</title>
       <link>/page/about/</link>
       <pubDate>Wed, 05 Jul 2017 00:00:00 +0000</pubDate>
-      <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
       <guid>/page/about/</guid>
       <description>About the site This will be a blog.
 Setup This was built with Hugo. I used a modified version of the Minimo theme.</description>

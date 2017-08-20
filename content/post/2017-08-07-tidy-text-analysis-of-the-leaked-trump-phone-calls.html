@@ -38,20 +38,25 @@ australia &lt;- transcripts %&gt;%
   html_text()
 
 clean &lt;- . %&gt;%
+<<<<<<< HEAD
   data.frame(sentences = ., stringsAsFactors = FALSE) %&gt;%
+=======
+  data_frame(line = 1:length(.), sentences = .) %&gt;%
+  # unnest_tokens does conv to lowercase, punctuation removal
+>>>>>>> 562d7699657fba1936ad94b57acaeef8690e5b11
   unnest_tokens(word, sentences) %&gt;%
-  anti_join(stop_words) %&gt;%
-  count(word, sort = TRUE)</code></pre>
+  anti_join(by = &quot;word&quot;, stop_words)</code></pre>
 <p>I also created a new column, which shows which sentence belongs to which call. After this I joined the two conversations back together.<br />
 Maybe one could do the above thing more elegantly, for example use <code>apply</code> and NSE in a creative way (i.e. create a list with the country names, use apply on them and the pipe sequence, and pass them to the new column). I might do this in the future, if it’s feasible.</p>
-<pre class="r"><code>mexico_word_counts &lt;- mexico %&gt;% clean %&gt;% mutate(call = &quot;Mexico&quot;)
-australia_word_counts &lt;- australia %&gt;% clean %&gt;% mutate(call = &quot;Australia&quot;)
+<pre class="r"><code>mexico_words &lt;- mexico %&gt;% clean %&gt;% mutate(call = &quot;Mexico&quot;)
+australia_words &lt;- australia %&gt;% clean %&gt;% mutate(call = &quot;Australia&quot;)
 
-word_counts &lt;- rbind(mexico_word_counts,
-                     australia_word_counts)</code></pre>
+word_counts &lt;- rbind(mexico_words,
+                     australia_words)</code></pre>
 <p>Next, I filtered out the 15 most used words by Trump, and created a bar chart for them:</p>
 <pre class="r"><code>word_counts %&gt;%
   group_by(call) %&gt;%
+  count(word, sort = TRUE) %&gt;%
   top_n(15, n) %&gt;%
   ungroup() %&gt;%
   mutate(word = reorder(word, n)) %&gt;%

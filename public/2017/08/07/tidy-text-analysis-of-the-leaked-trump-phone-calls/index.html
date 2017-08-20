@@ -9,6 +9,7 @@ if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p
 
 <meta property='og:title' content='Tidy text analysis of the leaked Trump phone calls • Dániel Berecz'>
 <meta property='og:description' content='Last week I read the leaked phone calls between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the Tidy Textmining in R book, so here we are.
+<<<<<<< HEAD
 if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;) pacman::p_load(rprojroot, tidyverse, ggplot2, dplyr, rvest, stringi, tidytext, knitr) # setting project root, and creating temp folder for images # root &lt;- find_root(is_rstudio_project) For start I downloaded the text for both conversations seperately.'>
 <meta property='og:url' content='/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/'>
 <meta property='og:site_name' content='Abgründe'>
@@ -332,3 +333,334 @@ word_counts &lt;- rbind(mexico_word_counts,
 
 </html>
 
+=======
+if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)pacman::p_load(rprojroot,tidyverse,ggplot2,dplyr,rvest,stringi,tidytext,knitr)## package &#39;haven&#39; successfully unpacked and MD5 sums checked## package &#39;tidyverse&#39; successfully unpacked and MD5 sums checked## ## The downloaded binary packages are in## C:\Users\daniel.'>
+<meta property='og:url' content='/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/'>
+<meta property='og:site_name' content='Abgründe'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/48048310a61a68060cb1c9fe1cd05613?s=256'><meta property='article:section' content='Post'><meta property='article:tag' content='draft'><meta property='article:published_time' content='2017-08-07T00:00:00Z'/><meta property='article:modified_time' content='2017-08-07T00:00:00Z'/>
+
+<meta name="generator" content="Hugo 0.24.1" />
+
+  <base href='/'>
+  <title>Tidy text analysis of the leaked Trump phone calls • Dániel Berecz</title>
+  <link rel='canonical' href='/2017/08/07/tidy-text-analysis-of-the-leaked-trump-phone-calls/'>
+  <link href='' rel='alternate' type='application/rss+xml' title='Abgründe' />
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Catamaran|Inconsolata|Lato:400i'>
+<link rel='stylesheet' href='/css/main.d02777fd.css'>
+
+
+
+  
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/paraiso-dark.min.css' rel='stylesheet' type='text/css' />
+
+
+
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+  
+<script src="/js/math-code.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</head>
+
+
+<body class='page'>
+  <div class='site'>
+    <header id='header' class='header-container'>
+      <div class='site-header'>
+        <nav id='navmenu' aria-label='Main Menu'>
+  <ul class='main-menu'>
+    
+    <li>
+      <a href='/'>Home</a>
+    </li>
+    
+    <li>
+      <a href='/post/'>Blog</a>
+    </li>
+    
+    <li>
+      <a href='/page/talks/'>Talks</a>
+    </li>
+    
+    <li>
+      <a href='/page/about/'>About</a>
+    </li>
+    
+  </ul>
+</nav>
+
+        <div class='site-info'>
+          
+          <p class='site-title title'>Abgründe</p>
+          
+          <p class='site-description'></p>
+        </div>
+      </div>
+    </header>
+
+
+<main class='main'>
+  <article lang='en' class='entry'>
+    <header class='entry-header'>
+  <div class='entry-info'>
+    <h1 class='entry-title title'>Tidy text analysis of the leaked Trump phone calls</h1>
+    
+  </div>
+  
+<div class='meta'>
+  <span class='posted-on'>
+    <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+  <line x1="16" y1="2" x2="16" y2="6"/>
+  <line x1="8" y1="2" x2="8" y2="6"/>
+  <line x1="3" y1="10" x2="21" y2="10"/>
+  
+</svg>
+
+    <span class='screen-reader'>Posted on </span>
+    <time class='date' datetime='2017-08-07T00:00:00Z'>2017, Aug 07</time>
+  </span>
+  
+  <span class='byline'>
+    <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M21,21V20c0-2.76-4-5-9-5s-9,2.24-9,5v1"/>
+  <path d="M16,6.37A4,4,0,1,1,12.63,3,4,4,0,0,1,16,6.37Z"/>
+  
+</svg>
+
+    <span class='screen-reader'> by </span>
+    Dániel Berecz
+  </span>
+  
+</div>
+
+
+</header>
+
+    <div class='entry-content'>
+  <p>Last week I read the <a href="https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/">leaked phone calls</a> between Donald Trump, and the leaders of Mexico, and Australia, and I was again shocked a bit, by the president’s command of the English language. Coincidently, I wanted to read, and try out the things in the <a href="http://tidytextmining.com/tidytext.html">Tidy Textmining in R</a> book, so here we are.</p>
+<pre class="r"><code>if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
+pacman::p_load(rprojroot,
+               tidyverse,
+               ggplot2,
+               dplyr,
+               rvest,
+               stringi,
+               tidytext,
+               knitr)</code></pre>
+<pre><code>## package &#39;haven&#39; successfully unpacked and MD5 sums checked
+## package &#39;tidyverse&#39; successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\daniel.berecz\AppData\Local\Temp\Rtmpw768GJ\downloaded_packages</code></pre>
+<pre class="r"><code># setting project root, and creating temp folder for images
+# root &lt;- find_root(is_rstudio_project)</code></pre>
+<p>For start I downloaded the text for both conversations seperately. The Washington Post’s developers created a pretty great structure for the transcript’s site. Everything is neatly nested hiearhically. For example there is a <code>mexico</code> class, which has a <code>transcript</code>, and <code>transcript-container</code> class in it, and inside them there is a seperate class for the different leaders.<br />
+I used the <code>rvest</code> package to download the text from the site. As you can see from the code, getting the required parts of the text was pretty straight forward, and thanks to the site’s structure, the code is pretty expressive.<br />
+I downloaded only Trump’s sentences, and I downloaded them seperately for both calls. I created an <a href="https://jennybc.github.io/purrr-tutorial/pt00_gotchas.html">unary function</a>, because I wanted to apply the same transformations on both text, but didn’t want to repeat code.</p>
+<pre class="r"><code>transcripts &lt;- read_html(&quot;https://www.washingtonpost.com/graphics/2017/politics/australia-mexico-transcripts/&quot;)
+
+mexico &lt;- transcripts %&gt;%
+  html_nodes(&quot;.mexico .trump p&quot;) %&gt;%
+  html_text()
+
+australia &lt;- transcripts %&gt;%
+  html_nodes(&quot;.australia .trump p&quot;) %&gt;%
+  html_text()
+
+clean &lt;- . %&gt;%
+  data_frame(line = 1:length(.), sentences = .) %&gt;%
+  # unnest_tokens does conv to lowercase, punctuation removal
+  unnest_tokens(word, sentences) %&gt;%
+  anti_join(by = &quot;word&quot;, stop_words)</code></pre>
+<p>I also created a new column, which shows which sentence belongs to which call. After this I joined the two conversations back together.<br />
+Maybe one could do the above thing more elegantly, for example use <code>apply</code> and NSE in a creative way (i.e. create a list with the country names, use apply on them and the pipe sequence, and pass them to the new column). I might do this in the future, if it’s feasible.</p>
+<pre class="r"><code>mexico_words &lt;- mexico %&gt;% clean %&gt;% mutate(call = &quot;Mexico&quot;)
+australia_words &lt;- australia %&gt;% clean %&gt;% mutate(call = &quot;Australia&quot;)
+
+word_counts &lt;- rbind(mexico_words,
+                     australia_words)</code></pre>
+<p>Next, I filtered out the 15 most used words by Trump, and created a bar chart for them:</p>
+<pre class="r"><code>word_counts %&gt;%
+  group_by(call) %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  top_n(15, n) %&gt;%
+  ungroup() %&gt;%
+  mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(x = word, y = n, fill = call)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ call)</code></pre>
+<p><img src="/post/2017-08-07-tidy-text-analysis-of-the-leaked-trump-phone-calls_files/figure-html/word-freq-viz-1.png" /><!-- --></p>
+
+</div>
+
+    
+<footer class='entry-footer'>
+  
+    
+      
+      
+
+<div class='categories'>
+  <span class='category-icon'>
+    <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
+  
+</svg>
+
+  </span>
+  <span class='screen-reader'>Categories: </span><a class='category' href='/categories/text_mining'>text_mining</a></div>
+
+    
+  
+    
+      
+      
+
+<div class='tags'>
+  <span class='tag-icon'>
+    <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z"/>
+  <line x1="7" y1="7" x2="7" y2="7"/>
+  
+</svg>
+
+  </span>
+  <span class='screen-reader'>Tags: </span><a class='tag' href='/tags/draft'>draft</a></div>
+
+    
+  
+</footer>
+
+
+  </article>
+
+  
+    
+<nav class='entry-nav'>
+  <div class='entry-nav-links'><div class='prev-entry'>
+      <a href='/2017/07/12/recreating-washing-post-s-solar-eclipse-plot-in-r/'>
+        <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="20" y1="12" x2="4" y2="12"/>
+  <polyline points="10 18 4 12 10 6"/>
+  
+</svg>
+ Previous</span>
+        <span class='screen-reader'>Previous post: </span>Recreating Washing Post&#39;s solar eclipse plot in R</a>
+    </div></div>
+</nav>
+
+
+  
+
+  
+    <div class='comments-container'>
+  
+</div>
+
+  
+</main>
+
+    <footer id='footer' class='footer-container'>
+      <div class='footer'>
+        <div class='social'>
+          <nav aria-label='Social Menu'>
+  <ul class='social-menu'>
+  
+    
+    <li>
+      <a href='https://github.com/danimad' target='_blank' rel='noopener'>
+        <span class='screen-reader'>Open Github account in new tab</span>
+        <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+  
+</svg>
+
+      </a>
+    </li>
+    
+  
+    
+    <li>
+      <a href='https://stackoverflow.com/users/749310/danielb?tab=profile' target='_blank' rel='noopener'>
+        <span class='screen-reader'>Open Stackoverflow account in new tab</span>
+        <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+        <g stroke-width=1.3>
+            <polygon id="Shape" points="16.8648649 21.7636364 16.8648649 15.4363636 18.9459459 15.4363636 18.9459459 23.8636364 0.162162162 23.8636364 0.162162162 15.4363636 2.24324324 15.4363636 2.24324324 21.7636364"></polygon>
+            <path d="M4.54054054,14.8363636 L14.7567568,16.9909091 L15.1891892,14.9181818 L4.97297297,12.7636364 L4.54054054,14.8363636 Z M5.89189189,9.92727273 L15.3513514,14.3727273 L16.2162162,12.4636364 L6.75675676,7.99090909 L5.89189189,9.92727273 Z M8.51351351,5.23636364 L16.5405405,11.9727273 L17.8648649,10.3636364 L9.83783784,3.62727273 L8.51351351,5.23636364 Z M13.7027027,0.245454545 L12.027027,1.5 L18.2432432,9.95454545 L19.9189189,8.7 L13.7027027,0.245454545 Z M4.32432432,19.6363636 L14.7567568,19.6363636 L14.7567568,17.5363636 L4.32432432,17.5363636 L4.32432432,19.6363636 Z" id="Shape"></path>
+        </g>
+  
+</svg>
+
+      </a>
+    </li>
+    
+  
+    
+    <li>
+      <a href='https://twitter.com/DanielBerecz' target='_blank' rel='noopener'>
+        <span class='screen-reader'>Open Twitter account in new tab</span>
+        <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+  
+</svg>
+
+      </a>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+        </div>
+
+        <div class='copyright'>
+          <p>
+    
+  
+  &copy; 2017 Dániel Berecz</p>
+
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src='/js/main.af838dd5.js'></script>
+  
+
+</body>
+
+</html>
+
+>>>>>>> 562d7699657fba1936ad94b57acaeef8690e5b11

@@ -7,7 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <managingEditor>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</managingEditor>
+<<<<<<< HEAD
     <webMaster>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</webMaster>
+=======
+    <webMaster>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</webMaster>
+>>>>>>> 562d7699657fba1936ad94b57acaeef8690e5b11
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -24,8 +28,13 @@
     <item>
       <title>Rstats</title>
       <link>/categories/rstats/</link>
+<<<<<<< HEAD
       <pubDate>Sun, 20 Aug 2017 00:00:00 +0000</pubDate>
       <author>map[host:gmail.com username:daniel.berecz] (Dániel Berecz)</author>
+=======
+      <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
+      <author>map[username:daniel.berecz host:gmail.com] (Dániel Berecz)</author>
+>>>>>>> 562d7699657fba1936ad94b57acaeef8690e5b11
       <guid>/categories/rstats/</guid>
       <description></description>
     </item>
